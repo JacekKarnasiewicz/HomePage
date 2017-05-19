@@ -1,0 +1,238 @@
+{% load mptt_tags %}
+{% load utility_tags %}
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Tree</h3>
+			</div>
+			<div id="tree_contener" class="panel-body">
+				<ul>
+					{% recursetree nodes %}
+						<li>
+							<h4 class="folder"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> {{ node.name }}</h4>
+
+							{% if not node.is_leaf_node %}
+								<ul class="children">
+									{{ children }}
+								</ul>
+							{% endif %}
+							<ul>
+							{% for item in node.item_set.all %}
+								<li>
+									<h4>
+										<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+										<a data-trigger="hover" data-toggle="popover" title="{{ item.name }}" data-content="{{ item.description }}" data-trigger="focus" target="_blank" href="{{ item.link }}">{{ item.name }}</a>
+									</h4>
+								</li>
+							{% endfor %}
+							</ul>
+						</li>
+					{% endrecursetree %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Add Catalog<span class="glyphicon glyphicon-menu-{% if form_name != 'catalog_form_add' %}down{% else %}up{% endif %} pull-right" aria-hidden="true"></span></h3>
+			</div>
+			<div class="panel-body panel-form" {% if form_name != 'catalog_form_add' %}hidden{% endif %}>
+				<form method="POST" action="">
+					{% csrf_token %}
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field catalog_form_add.name %}
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field catalog_form_add.parent %}
+							</div>
+						</div>
+					</fieldset>
+					<footer>
+						<input class="btn btn-primary" type="submit" name="catalog_form_add" value="Add Catalog">
+					</footer>
+				</form>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Remove Catalog<span class="glyphicon glyphicon-menu-{% if form_name != 'catalog_form_remove' %}down{% else %}up{% endif %} pull-right" aria-hidden="true"></span></h3>
+			</div>
+			<div class="panel-body panel-form" {% if form_name != 'catalog_form_remove' %}hidden{% endif %}>
+				<form method="POST" action="">
+					{% csrf_token %}
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field catalog_form_remove.parent %}
+							</div>
+						</div>
+					</fieldset>
+					<footer>
+						<input class="btn btn-primary" type="submit" name="catalog_form_remove" value="Remove Catalog">
+					</footer>
+				</form>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Add Item<span class="glyphicon glyphicon-menu-{% if form_name != 'item_form_add' %}down{% else %}up{% endif %} pull-right" aria-hidden="true"></span></h3>
+			</div>
+			<div class="panel-body panel-form" {% if form_name != 'item_form_add' %}hidden{% endif %}>
+				<form method="POST" action="">
+					{% csrf_token %}
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field item_form_add.name %}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field item_form_add.link %}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field item_form_add.description %}
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field item_form_add.catalog %}
+							</div>
+						</div>
+					</fieldset>
+					<footer>
+						<input class="btn btn-primary" type="submit" name="item_form_add" value="Add Item">
+					</footer>
+				</form>
+			</div>
+		</div>		
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Remove Item<span class="glyphicon glyphicon-menu-{% if form_name != 'item_form_remove' %}down{% else %}up{% endif %} pull-right" aria-hidden="true"></span></h3>
+			</div>
+			<div class="panel-body panel-form" {% if form_name != 'item_form_remove' %}hidden{% endif %}>
+				<form method="POST" action="">
+					{% csrf_token %}
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% form_field item_form_remove.item %}
+							</div>
+						</div>
+					</fieldset>
+					<footer>
+						<input class="btn btn-primary" type="submit" name="item_form_remove" value="Remove Item">
+					</footer>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% block javascript %}
+<script type="text/javascript">
+	'use strict';
+	$(document).ready(function() {
+		// popover
+		$('[data-toggle="popover"]').popover();
+
+		// pointers
+		let folders = $('h4.folder');
+		folders.css( 'cursor', 'pointer' );
+		$('.panel-heading:not(:first)').css('cursor', 'pointer');
+
+		// folders
+		folders.on('click', function() {
+			let _this = $(this);
+			let span = _this.children('span');
+			let ul = _this.parent('li').find('ul');
+
+			if (span.attr('class').indexOf('open') != -1) {
+				span.attr('class', 'glyphicon glyphicon-folder-close folder');
+			}
+			else {
+				span.attr('class', 'glyphicon glyphicon-folder-open folder');
+			}
+			ul.toggle('fast');
+		});
+
+
+		// panels
+		$('.panel-heading:not(:first)').on('click', function() {
+			let _this = $(this).siblings('.panel-form');
+			let span = $('span', $(this));
+
+			if (span.attr('class').indexOf('down') != -1) {
+				span.attr('class', 'glyphicon glyphicon-menu-up pull-right');
+			}
+			else {
+				span.attr('class', 'glyphicon glyphicon-menu-down pull-right');
+			}
+
+			_this.slideToggle('fast');
+
+			// collapse inactive panels
+			$('.panel-form').not(_this).each(function(index, item) {
+				let q_item = $(item);
+				if (q_item.is(':visible')) {
+					$('span', q_item.siblings('div.panel-heading')[0]).attr('class', 'glyphicon glyphicon-menu-down pull-right');
+					q_item.slideToggle('fast');
+				}
+			});
+		});
+
+
+		// select2
+		$('select').select2({
+			width: '100%',
+		});
+
+
+		// ajax
+		$('form').submit(function(e) {
+			e.preventDefault();
+
+			let form_data = new FormData(this);
+			form_data.set('form_name', this[this.length-1].name);
+			
+			$.ajax({
+				url: {% url 'tree_traversal:tree_traversal' %},
+				type: 'POST',
+				data: form_data,
+				processData: false,
+				contentType: false,
+				cache: false,
+				beforeSend: function () {
+					$("body").css("cursor", "wait");
+				},
+				success: function(data) {
+					$('#tree_form').html(data.template);
+				},
+				error: function() {
+					console.log('AJAX ERROR');
+				},
+				complete: function() {
+					$("body").css("cursor", "default");
+				}
+			});
+		});
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,119 @@
+[
+{
+  "model": "search_app.applications",
+  "pk": 1,
+  "fields": {
+    "name": "Change Styling",
+    "description": "Alternative color styles for the page. Necessary information are stored in cookies.",
+    "tags": "python, django, css, context processors, cookies",
+    "image": "images/change_styling/change_styling.jpg",
+    "url_source": "https://www.diki.pl/",
+    "url_name": "change_styling",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 2,
+  "fields": {
+    "name": "Search Applications",
+    "description": "Available filter tags:\r\n<br>\r\npython, django, django channels, javascript, css, matplotlib, numpy, pandas, scikit-learn, highcharts, pillow, mptt, template tags, ajax, yield, thread, streaminghttpresponse, context processors, cookies, signals, websocket, authentication, regex, tabindex, chat, codility, julia set, fractals, wallpaper",
+    "tags": "python, django, signals, regex, tabindex, javascript",
+    "image": "images/search_app/search_app.png",
+    "url_source": "http://nba.com",
+    "url_name": "search_app",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 3,
+  "fields": {
+    "name": "Modified Preorder Tree Traversal",
+    "description": "Using django-mptt for storing hierarchical data in efficient way. Feel free to add, remove catalogs or items.",
+    "tags": "python, django, mptt, template tags, ajax, javascript",
+    "image": "images/tree_traversal/tree_traversal.jpg",
+    "url_source": "https://django.com",
+    "url_name": "tree_traversal",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 4,
+  "fields": {
+    "name": "Julia Set - Fractals Generator",
+    "description": "<p>Beautiful examples of of 'chaotic' behavior of Julia set.</p>\r\n\r\n<p>Time necessary to generate fractal picture depend heavily on processor speed on server, max iteration and also on width of the picture, thus 1000-width picture with max iteration equal to 50 takes up to 20 seconds, but picture with 3000-width and 255 iterations takes up to couple of minutes - so be patience :).</p>\r\n\r\n<p>Real and Imaginary part is from complex number of c from f(z) = z**2 + c (complex quadratic polynomial)</p>",
+    "tags": "python, django, julia set, fractals, pillow",
+    "image": "images/julia_set/julia_set.jpg",
+    "url_source": "https://en.wikipedia.org/wiki/Julia_set/",
+    "url_name": "julia_set",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 5,
+  "fields": {
+    "name": "Streaming Wallpapers",
+    "description": "<p>Fun with Yielding, Threading and StreamingHttpResponse ... to get really nice wallpapers from my favorite page with wallpapers - https://alpha.wallhaven.cc/.</p>\r\n<p>Note: In compare to regular HttpResponse or JsonResponse(you can find this approach in my code), a StreamingHttpResponse it's much faster, but it's a little bit clunky e.g. I needed to cut my original base.html in 3 parts, and I couldn't use template inheritance. Any tips or suggestion to make it better will be welcome.\r\n... p.s. socket usage is a technology for different app :)</p>",
+    "tags": "python, django, yield, thread, streaminghttpresponse, wallpaper",
+    "image": "images/wallpaper/wallpaper.jpg",
+    "url_source": "https://docs.djangoproject.com/en/1.10/",
+    "url_name": "wallpaper",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 6,
+  "fields": {
+    "name": "Matplotlib Graphs",
+    "description": "Generating custom function graphs in pdf, svg, or png format using numpy, matplotlib and pandas",
+    "tags": "python, django, matplotlib, numpy, pandas",
+    "image": "images/mpl_graph/mpl_graph.jpg",
+    "url_source": "http://matplotlib.org/users/screenshots.htmla",
+    "url_name": "mpl_graph",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 7,
+  "fields": {
+    "name": "Codility Solutions",
+    "description": "My solutions for codility challenges, much appreciation for any help, tips or new ideas that improve my code and help achieve 100% correctness and performance in every task!\r\nIn most cases the correctness is 100%, but performance sometime is really lagging.\r\nGradually I will add next solutions or improve older ones.",
+    "tags": "python, django, codility, javascript",
+    "image": "images/codility/codility.jpg",
+    "url_source": "https://www.diki.pl/",
+    "url_name": "codility",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 8,
+  "fields": {
+    "name": "SciKit-Learn with Highcharts",
+    "description": "Using SciKit-Learn to create two interactive models for supervised learning. One with linear regression with accuracy, and one with k-nearest neighbors classification with confidence. Dynamic graphs utilize highcharts library.",
+    "tags": "python, django, scikit-learn, highcharts, javascript, ajax",
+    "image": "images/scikit_chart/scikit_chart.jpg",
+    "url_source": "http://www.highcharts.com/demo",
+    "url_name": "scikit_chart",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": 9,
+  "fields": {
+    "name": "Django Channels with Authetication",
+    "description": "Simple general chat that utilize django channels and reddis backend. To use it just create an account (or two) and open two different window browsers.\r\nBy design I don't store any conversation or any information that are put into chat.\r\nSo have fun and be polite :)",
+    "tags": "python, django, javascript, signals, django channels, authentication, websocket, chat",
+    "image": "images/auth_chat/auth_chat.jpg",
+    "url_source": "https://realpython.com/blog/python/getting-started-with-django-channels/",
+    "url_name": "auth_chat",
+    "visible": true
+  }
+}
+]

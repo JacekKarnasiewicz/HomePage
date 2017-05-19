@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block jumbotron %}
+
+	<h1>{{ current_app.name }}</h1>
+	<p class="lead">{{ current_app.description|safe }}</p>
+
+{% endblock %}
+
+{% block content %}
+
+	<div id="tree_form">
+		{% include 'tree_traversal/tree_forms.html' %}
+	</div>
+
+{% endblock %}

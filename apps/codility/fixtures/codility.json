@@ -1,0 +1,362 @@
+[
+{
+  "model": "codility.codilitytask",
+  "pk": 1,
+  "fields": {
+    "title": "Lesson 1, BinaryGap (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(N):\r\n\tbin_value = bin(N).split('1')[1:-1]\r\n\tlength_value = [len(i) for i in bin_value]\r\n\treturn max(length_value) if length_value else 0",
+    "link": "https://codility.com/programmers/lessons/1-iterations/binary_gap/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 2,
+  "fields": {
+    "title": "Lesson 2, OddOccurrencesInArray (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tdi = dict()\r\n\tfor i in A:\r\n\t\tif i in di:\r\n\t\t\tdel di[i]\r\n\t\telse:\r\n\t\t\tdi[i] = 0\r\n\treturn di.popitem()[0]",
+    "link": "https://codility.com/programmers/lessons/2-arrays/odd_occurrences_in_array/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 3,
+  "fields": {
+    "title": "Lesson 2, CyclicRotation (100%)",
+    "annotation": "No annotations",
+    "code": "def lsolution(A, K):\r\n\tif A:\r\n\t\tfor i in range(K):\r\n\t\t\tA.insert(0, (A.pop()))\r\n\treturn A",
+    "link": "https://codility.com/programmers/lessons/2-arrays/cyclic_rotation/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 4,
+  "fields": {
+    "title": "Lesson 3, FrogJmp (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(X, Y, D):\r\n\tfloor_div, remainder = divmod(Y - X, D)\r\n\treturn floor_div if remainder == 0 else floor_div + 1",
+    "link": "https://codility.com/programmers/lessons/3-time_complexity/frog_jmp/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 5,
+  "fields": {
+    "title": "Lesson 3, PermMissingElem (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tlen_A = len(A) + 2\r\n\tset_A = set(A)\r\n\tset_B = set(range(1, len_A))\r\n\treturn (set_B - set_A).pop()",
+    "link": "https://codility.com/programmers/lessons/3-time_complexity/perm_missing_elem/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 6,
+  "fields": {
+    "title": "Lesson 3, TapeEquilibrium (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tsum_A, sum_B = sum(A[:1]), sum(A[1:])\r\n\tresult = abs(sum_A - sum_B)\r\n\tfor i in range(1, len(A)-1):\r\n\t\tsum_A = sum_A + A[i]\r\n\t\tsum_B = sum_B - A[i]\r\n\t\tdiff = abs(sum_A - sum_B)\r\n\t\tresult = diff if diff < result else result\r\n\treturn result",
+    "link": "https://codility.com/programmers/lessons/3-time_complexity/tape_equilibrium/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 7,
+  "fields": {
+    "title": "Lesson 4, PermCheck (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tl = len(A)\r\n\ttable = [0]*l\r\n\tfor i in A:\r\n\t\ttry:\r\n\t\t\ttable[i-1] += 1\r\n\t\texcept IndexError:\r\n\t\t\treturn 0\r\n\treturn 0 if 0 in table else 1",
+    "link": "https://codility.com/programmers/lessons/4-counting_elements/perm_check/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 8,
+  "fields": {
+    "title": "Lesson 4, FrogRiverOne (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(X, A):\r\n\tfinal_set = set()\r\n\tfor index, i in enumerate(A):\r\n\t\tif i <= X:\r\n\t\t\tfinal_set.add(i)\r\n\t\t\tif len(final_set) == X:\r\n\t\t\t\treturn index\r\n\treturn -1",
+    "link": "https://codility.com/programmers/lessons/4-counting_elements/frog_river_one/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 9,
+  "fields": {
+    "title": "Lesson 4, MissingInteger (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tori_set = {i for i in A if i > 0}\r\n\tif not ori_set:\r\n\t\treturn 1\r\n\tif len(ori_set) == 1:\r\n\t\tnumber = ori_set.pop()\r\n\t\treturn  1 if number != 1 else 2\r\n\tmax_set = max(ori_set)\r\n\tfor i in xrange(1, max_set + 2):\r\n\t\tif i not in ori_set:\r\n\t\t\treturn i",
+    "link": "https://codility.com/programmers/lessons/4-counting_elements/missing_integer/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 10,
+  "fields": {
+    "title": "Lesson 4, MaxCounters (88%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(N, A):\r\n\tresult = [0]*N\r\n\thighest_value = 0\r\n\tlast_operation = 'max_counter'\r\n\tfor i in A:\r\n\t\tif i == N+1:\r\n\t\t\tif last_operation == 'increase':\r\n\t\t\t\tresult = [highest_value]*N\r\n\t\t\t\tlast_operation = 'max_counter'\r\n\t\t\tcontinue\r\n\t\tresult[i-1] += 1\r\n\t\tif result[i-1] > highest_value:\r\n\t\t\thighest_value = result[i-1]\r\n\t\t\tlast_operation = 'increase'\r\n\treturn result",
+    "link": "https://codility.com/programmers/lessons/4-counting_elements/max_counters/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 11,
+  "fields": {
+    "title": "Lesson 5, PassingCars (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tresults = [0, 0]\r\n\tfor i in A:\r\n\t\tif i == 0:\r\n\t\t\tresults[0] += 1\r\n\t\telse:\r\n\t\t\tresults[1] += results[0]\r\n\t\tif results[1] > 1000000000:\r\n\t\t\treturn -1\r\n\treturn results[1]",
+    "link": "https://codility.com/programmers/lessons/5-prefix_sums/passing_cars/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 12,
+  "fields": {
+    "title": "Lesson 5, CountDiv (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A, B, K):\r\n\tedge = 0\r\n\tif A == 0 and B == 0:\r\n\t\treturn 1\r\n\tif A == B:\r\n\t\tif A%K == 0:\r\n\t\t\treturn 1\r\n\t\treturn 0\r\n\tif K == 1:\r\n\t\treturn B - A + 1\r\n\tif A%K == 0:\r\n\t\tedge += 1\r\n\tif K >= A:\r\n\t\treturn B//K + edge\r\n\telse:\r\n\t\treturn B//K - A//K + edge",
+    "link": "https://codility.com/programmers/lessons/5-prefix_sums/count_div/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 13,
+  "fields": {
+    "title": "Lesson 5, GenomicRangeQuery (100%)",
+    "annotation": "Two solutions(ugly and fast, and nicer and slower)",
+    "code": "def solution(S, P, Q):\r\n\timp_factor = {'A': 1, 'C': 2, 'G': 3, 'T': 4}\r\n\titem = {'A': 0, 'C': 0, 'G': 0, 'T': 0}\r\n\tresults = []\r\n\tmod_S = []\r\n\r\n\tfor letter in S:\r\n\t\titem[letter] += 1\r\n\t\tmod_S.append(item.copy())\r\n\r\n\tfor i, j in zip(P, Q):\r\n\t\tif (i == j):\r\n\t\t\tresults.append(imp_factor[S[i]])\r\n\t\t\tcontinue\r\n\r\n\t\tres = {'A': 0, 'C': 0, 'G': 0, 'T': 0}\r\n\t\tfor l in ['A', 'C', 'G', 'T']:\r\n\t\t\tres[l] = mod_S[j][l] - mod_S[i-1][l] if i != 0 else mod_S[j][l]\r\n\t\t\tif res[l] > 0:\r\n\t\t\t\tresults.append(imp_factor[l])\r\n\t\t\t\tbreak\r\n\t\t\r\n\treturn results\r\n\r\n\r\n\r\nThis is more pleasant, but slower solution\r\n\r\ndef solution(S, P, Q):\r\n\tresults = []\r\n\timp_factor = (('A', 1), ('C', 2), ('G', 3), ('T', 4))\r\n\tfor i, j in zip(P, Q):\r\n\t\tunique_letters = set(S[i:j+1])\r\n\t\tfor letter, factor in imp_factor:\r\n\t\t\tif letter in unique_letters:\r\n\t\t\t\tresults.append(factor)\r\n\t\t\t\tbreak\r\n\treturn results",
+    "link": "https://codility.com/programmers/lessons/5-prefix_sums/genomic_range_query/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 14,
+  "fields": {
+    "title": "Lesson 6, Distinct (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\treturn len(set(A))",
+    "link": "https://codility.com/programmers/lessons/6-sorting/distinct/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 15,
+  "fields": {
+    "title": "Lesson 6, MaxProductOfThree (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tA = sorted(A)\r\n\tpos = A[-1] * A[-2] * A[-3]\r\n\tif A[-1] <= 0 or A[0] > 0:\r\n\t\treturn pos\r\n\telse:\r\n\t\tneg = A[0] * A[1] * A[-1]\r\n\t\treturn pos if pos > neg else neg",
+    "link": "https://codility.com/programmers/lessons/6-sorting/max_product_of_three/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 16,
+  "fields": {
+    "title": "Lesson 6, Triangle (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tA = sorted(A)\r\n\tfor index, i in enumerate(A):\r\n\t\ttry:\r\n\t\t\tif i + A[index+1] > A[index+2] and i + A[index+2] > A[index+1] and A[index+1] + A[index+2] > i:\r\n\t\t\t\treturn 1\r\n\t\texcept IndexError:\r\n\t\t\treturn 0\r\n\t\t\t\r\n\treturn 0",
+    "link": "https://codility.com/programmers/lessons/6-sorting/triangle/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 17,
+  "fields": {
+    "title": "Lesson 6, NumberOfDiscIntersections (56%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(A):\r\n\tcount = 0\r\n\tsorted_list = sorted([(i-j, i+j) for i,j in enumerate(A)])\r\n\tfor index, item in enumerate(sorted_list):\r\n\t\tfor i in sorted_list[index+1:]:\r\n\t\t\tif item[1] < i[0]:\r\n\t\t\t\tbreak\r\n\t\t\tif((item[0] <= i[0] <= item[1]) or (item[0] <= i[1] <= item[1])):\r\n\t\t\t\tcount += 1\r\n\t\t\t\tif count > 10**7:\r\n\t\t\t\t\treturn -1\r\n\treturn count",
+    "link": "https://codility.com/programmers/lessons/6-sorting/number_of_disc_intersections/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 18,
+  "fields": {
+    "title": "Lesson 7, Brackets (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(S):\r\n\tlenght = len(S)\r\n\top = ['(', '[', '{']\r\n\ten = [')', ']', '}'] \r\n\tif lenght == 0:\r\n\t\treturn 1\r\n\tif lenght % 2 == 1:\r\n\t\treturn 0\r\n\tresults = []\r\n\tfor i in S:\r\n\t\tif i in op:\r\n\t\t\tresults.append(i)\r\n\t\telse:\r\n\t\t\ttry:\r\n\t\t\t\tif en.index(i) == op.index(results[-1]):\r\n\t\t\t\t\tdel results[-1]\r\n\t\t\t\telse:\r\n\t\t\t\t\treturn 0\r\n\t\t\texcept IndexError:\r\n\t\t\t\treturn 0\r\n\t\r\n\treturn 1 if len(results) == 0 else 0",
+    "link": "https://codility.com/programmers/lessons/7-stacks_and_queues/brackets/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 19,
+  "fields": {
+    "title": "Lesson 7, StoneWall (92%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(H):\r\n\tcounter = 0\r\n\tunique_heights = {}\r\n\tlast_height = None\r\n\tfor index, h in enumerate(H):\r\n\t\tif h in unique_heights:\r\n\t\t\tif min(H[unique_heights[h]:index]) >= h:\r\n\t\t\t\tcounter += 1\r\n\r\n\t\tunique_heights[h] = index\r\n\r\n\treturn len(H) - counter",
+    "link": "https://codility.com/programmers/lessons/7-stacks_and_queues/stone_wall/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 20,
+  "fields": {
+    "title": "Lesson 7, Fish (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A, B):\r\n\talive = []\r\n\tfor index, (a, b) in enumerate(zip(A, B)):\r\n\t\tif not alive:\r\n\t\t\talive.append((a, b))\r\n\t\t\tcontinue\r\n\t\tif (alive[-1][1], b) == (1, 0):\r\n\t\t\tif alive[-1][0] > a:\r\n\t\t\t\tcontinue\r\n\t\t\talive.pop()\r\n\t\t\talive.append((a, b))\r\n\t\t\ttry:\r\n\t\t\t\twhile (alive[-2][1], alive[-1][1]) == (1, 0):\r\n\t\t\t\t\tif alive[-2][0] > alive[-1][0]:\r\n\t\t\t\t\t\talive.pop()\r\n\t\t\t\t\t\tbreak\r\n\t\t\t\t\telse:\r\n\t\t\t\t\t\talive.pop(-2)\r\n\t\t\texcept IndexError:\r\n\t\t\t\tpass\r\n\t\telse:\r\n\t\t\talive.append((a, b))\r\n\r\n\treturn len(alive)",
+    "link": "https://codility.com/programmers/lessons/7-stacks_and_queues/fish/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 21,
+  "fields": {
+    "title": "Lesson 7, Nesting (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(S):\r\n\tlenght = len(S)\r\n\tif lenght == 0:\r\n\t\treturn 1\r\n\tif lenght % 2 == 1:\r\n\t\treturn 0\r\n\r\n\tbrackets = []\r\n\tfor index, item in enumerate(S):\r\n\t\tif not brackets:\r\n\t\t\tbrackets.append(item)\r\n\t\t\tcontinue\r\n\t\tif (brackets[-1], item) == ('(', ')'):\r\n\t\t\tbrackets.pop()\r\n\t\telse:\r\n\t\t\tbrackets.append(item)\r\n\r\n\treturn 0 if brackets else 1",
+    "link": "https://codility.com/programmers/lessons/7-stacks_and_queues/nesting/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 22,
+  "fields": {
+    "title": "Lesson 8, Dominator (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tdi = {}\r\n\tcenter = len(A)//2\r\n\tfor index, item in enumerate(A):\r\n\t\tif item in di:\r\n\t\t\tdi[item][0] += 1\r\n\t\telse:\r\n\t\t\tdi[item] = [1, index]\r\n\t\tif di[item][0] > center:\r\n\t\t\treturn di[item][1]\r\n\treturn -1",
+    "link": "https://codility.com/programmers/lessons/8-leader/dominator/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 23,
+  "fields": {
+    "title": "Lesson 8, EquiLeader (55%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(A):\r\n\tlenght = len(A)\r\n\tcounter = 0\r\n\tl_leader = None\r\n\tr_leader = None\r\n\r\n\tleft_leader = []\r\n\tleft_counter = {}\r\n\r\n\tright_leader = []\r\n\tright_counter = {}\r\n\r\n\tfor i in range(lenght):\r\n\t\tcurrent_len = i + 1\r\n\t\tif A[i] in left_counter:\r\n\t\t\tleft_counter[A[i]] += 1\r\n\t\telse:\r\n\t\t\tleft_counter[A[i]] = 1\r\n\t\tif left_counter[A[i]] >= current_len//2 + 1:\r\n\t\t\tleft_leader.append(A[i])\r\n\t\t\tl_leader = A[i]\r\n\t\telse:\r\n\t\t\tif left_counter[l_leader] >= current_len//2 + 1:\r\n\t\t\t\tleft_leader.append(l_leader)\r\n\t\t\telse:\r\n\t\t\t\tleft_leader.append('-')\r\n\r\n\t\tnegative_index = -current_len\r\n\t\tif A[negative_index] in right_counter:\r\n\t\t\tright_counter[A[negative_index]] += 1\r\n\t\telse:\r\n\t\t\tright_counter[A[negative_index]] = 1\r\n\t\tif right_counter[A[negative_index]] >= current_len//2 + 1:\r\n\t\t\tright_leader.insert(0, A[negative_index])\r\n\t\t\tr_leader = A[negative_index]\r\n\t\telse:\r\n\t\t\tif right_counter[r_leader] >= current_len//2 + 1:\r\n\t\t\t\tright_leader.insert(0, r_leader)\r\n\t\t\telse:\r\n\t\t\t\tright_leader.insert(0, '-')\r\n\r\n\tif l_leader is None:\r\n\t\treturn 0\r\n\r\n\tfor i in range(lenght - 1):\r\n\t\tif left_leader[i] == right_leader[i + 1] == l_leader:\r\n\t\t\tcounter += 1\r\n\r\n\treturn counter",
+    "link": "https://codility.com/programmers/lessons/8-leader/equi_leader/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 24,
+  "fields": {
+    "title": "Lesson 9, MaxDoubleSliceSum (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tlength = len(A)\r\n\tmax_ending_list_front = [0]*length\r\n\tmax_ending_front = 0\r\n\tfor index in range(1, length-1):\r\n\t\tmax_ending_front = max(0, A[index] + max_ending_front)\r\n\t\tmax_ending_list_front[index] = max_ending_front\r\n\r\n\tmax_ending_list_back = [0]*length\r\n\tmax_ending_back = 0\r\n\tfor index in range(length-2, 0, -1):\r\n\t\tmax_ending_back = max(0, A[index] + max_ending_back)\r\n\t\tmax_ending_list_back[index] = max_ending_back\r\n\r\n\tmax_slice = 0\r\n\tfor i in range(len(max_ending_list_front)-2):\r\n\t\tmax_slice = max(max_slice, max_ending_list_front[i] + max_ending_list_back[i+2])\r\n\r\n\treturn max_slice",
+    "link": "https://codility.com/programmers/lessons/9-maximum_slice_problem/max_double_slice_sum/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 25,
+  "fields": {
+    "title": "Lesson 9, MaxProfit (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(A):\r\n\tif len(A) < 2:\r\n\t\treturn 0\r\n\tmax_item = 0\r\n\tmin_item = A[0]\r\n\tbest = 0\r\n\tfor i in A:\r\n\t\tif i <= min_item:\r\n\t\t\tmin_item = i\r\n\t\t\tmax_item = 0\r\n\t\t\tcontinue\r\n\t\tif i >= max_item:\r\n\t\t\tmax_item = i\r\n\t\t\tdiff = max_item - min_item\r\n\t\t\tbest = diff if diff > best else best\r\n\treturn best",
+    "link": "https://codility.com/programmers/lessons/9-maximum_slice_problem/max_profit/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 26,
+  "fields": {
+    "title": "Lesson 9, MaxSliceSum (84%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(A):\r\n\tl = len(A)\r\n\tif l == 0:\r\n\t\treturn 0\r\n\tmax_slice = A[0]\r\n\tfor i in range(l):\r\n\t\ts = A[i]\r\n\t\tmax_slice = max(max_slice, s)\r\n\t\tfor j in range(i + 1, l):\r\n\t\t\ts = s + A[j]\r\n\t\t\tmax_slice = max(max_slice, s)\r\n\treturn max_slice",
+    "link": "https://codility.com/programmers/lessons/9-maximum_slice_problem/max_slice_sum/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 27,
+  "fields": {
+    "title": "Lesson 10, CountFactors (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(N):\r\n\tcount = 0\r\n\ti = 1\r\n\twhile i*i < N:\r\n\t\tif N%i == 0:\r\n\t\t\tcount += 2\r\n\t\ti += 1\r\n\tif i*i == N:\r\n\t\tcount += 1\r\n\treturn count",
+    "link": "https://codility.com/programmers/lessons/10-prime_and_composite_numbers/count_factors/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 28,
+  "fields": {
+    "title": "Lesson 10, MinPerimeterRectangle (100%)",
+    "annotation": "No annotations",
+    "code": "def solution(N):\r\n\tmin_perimeter = 2*1 + 2*N\r\n\ti = 2\r\n\twhile i*i <= N:\r\n\t\tif N % i == 0 and 2*(i) + 2*(N//i) < min_perimeter:\r\n\t\t\tmin_perimeter = 2*(i) + 2*(N//i)\r\n\t\ti += 1\r\n\r\n\treturn min_perimeter",
+    "link": "https://codility.com/programmers/lessons/10-prime_and_composite_numbers/min_perimeter_rectangle/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 29,
+  "fields": {
+    "title": "Lesson 10, Peaks (72%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(A):\r\n\tlength = len(A)\r\n\tpeaks = []\r\n\tfor index in range(1, length - 1):\r\n\t\tif A[index-1] < A[index] > A[index+1]:\r\n\t\t\tpeaks.append(index)\r\n\r\n\tif not peaks:\r\n\t\treturn 0\r\n\r\n\ti = 1\r\n\tfactors = []\r\n\tlen_peaks = len(peaks)\r\n\twhile i*i <= length:\r\n\t\tif length % i == 0:\r\n\t\t\tif i <= len_peaks:\r\n\t\t\t\tfactors.append(i)\r\n\t\t\tif length//i <= len_peaks:\r\n\t\t\t\tfactors.append(length//i)\r\n\t\ti += 1\r\n\r\n\tfactors = sorted(factors, reverse=True)\r\n\r\n\r\n\tfor i in factors:\r\n\t\tranges = length//i\r\n\t\tcount = 0\r\n\r\n\t\tfor j in range(1, i+1):\r\n\t\t\tfor k in peaks:\r\n\t\t\t\tif k < j*ranges:\r\n\t\t\t\t\tcount += 1\r\n\t\t\t\t\tbreak\r\n\r\n\t\tif i == count:\r\n\t\t\treturn i",
+    "link": "https://codility.com/programmers/lessons/10-prime_and_composite_numbers/peaks/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 30,
+  "fields": {
+    "title": "Lesson 10, Flags (66%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(A):\r\n\tpeaks = []\r\n\tfor i in range(1, len(A)-1):\r\n\t\tif A[i-1] < A[i] > A[i+1]:\r\n\t\t\tpeaks.append(i)\r\n\r\n\tflags = len(peaks)\r\n\t\r\n\tresults = 0\r\n\tfor f in range(1, flags+1):\r\n\t\tcount_flags = 0\r\n\t\tstart = None\r\n\t\tfor p in peaks:\r\n\t\t\tif not start:\r\n\t\t\t\tstart = p\r\n\t\t\t\tcount_flags += 1\r\n\t\t\t\tcontinue\r\n\t\t\tif count_flags == f:\r\n\t\t\t\tbreak\r\n\t\t\tif p-start >= f:\r\n\t\t\t\tstart = p\r\n\t\t\t\tcount_flags += 1\r\n\t\t\t\r\n\t\tif count_flags > results:\r\n\t\t\tresults = count_flags\r\n\r\n\treturn results",
+    "link": "https://codility.com/programmers/lessons/10-prime_and_composite_numbers/flags/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 31,
+  "fields": {
+    "title": "Lesson 11, CountSemiprimes (66%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def arrayF(n):\r\n\tF = [0] * (n + 1)\r\n\ti = 2\r\n\twhile (i * i <= n):\r\n\t\tif (F[i] == 0):\r\n\t\t\tk = i * i\r\n\t\t\twhile (k <= n):\r\n\t\t\t\tif (F[k] == 0):\r\n\t\t\t\t\tF[k] = i;\r\n\t\t\t\tk += i\r\n\t\ti += 1\r\n\treturn F\r\n\r\ndef solution(N, P, Q):\r\n\tresult = []\r\n\tprimes = arrayF(N)\r\n\r\n\tfor i in range(len(P)):\r\n\t\tcount = 0\r\n\t\tfor j in range(P[i], Q[i]+1):\r\n\t\t\tif primes[j] != 0:\r\n\t\t\t\tif primes[j//primes[j]] == 0:\r\n\t\t\t\t\tcount += 1\r\n\t\tresult.append(count)\r\n\treturn result",
+    "link": "https://codility.com/programmers/lessons/11-sieve_of_eratosthenes/count_semiprimes/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 32,
+  "fields": {
+    "title": "Lesson 11, CountNonDivisible (55%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def solution(A):\r\n\tresults = []\r\n\tA_c = sorted(A[:])\r\n\tlength = len(A_c)\r\n\r\n\tfor item in A:\r\n\t\tcount = 0\r\n\t\tindex = A_c.index(item)\r\n\t\tlast_index = index\r\n\t\ttry:\r\n\t\t\twhile A_c[index] == A_c[last_index+1]:\r\n\t\t\t\tlast_index += 1\r\n\t\texcept IndexError:\r\n\t\t\tpass\r\n\r\n\t\tcount += length - (last_index + 1)\r\n\t\twhile index > 0:\r\n\t\t\tindex -= 1\r\n\t\t\tif item % A_c[index] != 0:\r\n\t\t\t\tcount += 1\r\n\r\n\t\tresults.append(count)\r\n\r\n\treturn results",
+    "link": "https://codility.com/programmers/lessons/11-sieve_of_eratosthenes/count_non_divisible/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 33,
+  "fields": {
+    "title": "Lesson 12, ChocolatesByNumbers (100%)",
+    "annotation": "No annotations",
+    "code": "def gcd(a, b):\r\n\tif a % b == 0:\r\n\t\treturn b\r\n\treturn gcd(b, a % b)\r\n\r\n\r\ndef solution(N, M):\r\n\tgreatest_common_divisor = gcd(N, M)\r\n\tleast_common_multiple = N*M/greatest_common_divisor\r\n\treturn least_common_multiple/M",
+    "link": "https://codility.com/programmers/lessons/12-euclidean_algorithm/chocolates_by_numbers/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 34,
+  "fields": {
+    "title": "Lesson 12, CommonPrimeDivisors (61%)",
+    "annotation": "Help needed in speed performance",
+    "code": "def decay(n):\r\n\tprimes = []\r\n\tfor i in range(2, n+1):\r\n\t\twhile n % i == 0:\r\n\t\t\tprimes.append(i)\r\n\t\t\tn = n/i\r\n\t\t\tif n == 1:\r\n\t\t\t\tbreak\r\n\treturn set(primes)\r\n\r\n\r\ndef solution(A, B):\r\n\tresults = 0\r\n\tfor i in range(len(A)):\r\n\t\tif decay(A[i]) == decay(B[i]):\r\n\t\t\tresults += 1\r\n\treturn results",
+    "link": "https://codility.com/programmers/lessons/12-euclidean_algorithm/common_prime_divisors/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 35,
+  "fields": {
+    "title": "Lesson 13, Ladder (50%)",
+    "annotation": "Help needed in speed performance",
+    "code": "import operator as op\r\n\r\ndef ncr(n, r):\r\n\tr = min(r, n-r)\r\n\tif r == 0: return 1\r\n\ttry:\r\n\t\tnumer = reduce(op.mul, xrange(n, n-r, -1))\r\n\t\tdenom = reduce(op.mul, xrange(1, r+1))\r\n\texcept TypeError:\r\n\t\treturn 0\r\n\treturn numer//denom\r\n\r\ndef solution(A, B):\r\n\tL = len(A)\r\n\tresult = []\r\n\t\r\n\tfor index in xrange(L):\r\n\t\tcount = A[index]\r\n\t\tpartial_sum = 0\r\n\t\tfor i in xrange(L):\r\n\t\t\tpartial_sum += ncr(count, i)\r\n\t\t\tif i > count:\r\n\t\t\t\tbreak\r\n\t\t\tcount -= 1\r\n\t\tresult.append(partial_sum % 2**B[index])\r\n\treturn result",
+    "link": "https://codility.com/programmers/lessons/13-fibonacci_numbers/ladder/"
+  }
+},
+{
+  "model": "codility.codilitytask",
+  "pk": 36,
+  "fields": {
+    "title": "Lesson 13, FibFrog (25%)",
+    "annotation": "I think that correctness is 100%, but the performance is so terrible that i can't even pass some of the correctness test - Tips and ideas for speed up much appreciate!",
+    "code": "def fib(n):\r\n\tresult = []\r\n\ta, b = 0, 1\r\n\twhile a <= n:\r\n\t\tresult.append(a)\r\n\t\ta, b = b, a+b\r\n\treturn result\r\n\r\ndef solution(A):\r\n\tl = len(A)+1\r\n\tfib_num = fib(l)\r\n\tfib_num.remove(1)\r\n\tA.append(1)\r\n\tcount = [[]]\r\n\tdef fun(B):\r\n\t\tfor i in reversed(fib_num):\r\n\t\t\ttry:\r\n\t\t\t\tif B[i-1] == 1:\r\n\t\t\t\t\tif i != 0:\r\n\t\t\t\t\t\tcount[-1].append((i))\r\n\r\n\t\t\t\t\tif len(B) == i:\r\n\t\t\t\t\t\tif sum(count[-1]) != l:\r\n\t\t\t\t\t\t\tdel count[-1]\r\n\t\t\t\t\t\tcount.append([])\r\n\t\t\t\t\tif B == B[i:]:\r\n\t\t\t\t\t\tdel count[-1]\r\n\t\t\t\t\t\tcount.append([])\r\n\t\t\t\t\t\tcontinue\r\n\t\t\t\t\t\t\r\n\t\t\t\t\tfun(B[i:])\r\n\t\t\texcept IndexError:\r\n\t\t\t\tpass\r\n\tfun(A)\r\n\ttry:\r\n\t\tresult = min({len(i) for i in count if len(i) > 0})\r\n\texcept:\r\n\t\tresult = -1\r\n\r\n\treturn result",
+    "link": "https://codility.com/programmers/lessons/13-fibonacci_numbers/fib_frog/"
+  }
+}
+]

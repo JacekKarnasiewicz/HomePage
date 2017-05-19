@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load utility_tags %}
+
+{% block jumbotron %}
+	<h1>{{ current_app.name }}</h1>
+	<p class="lead">{{ current_app.description|safe }}</p>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Supervised learning - Regression</h3>
+				</div>
+
+				<div class="panel-body">
+					<p>Creating regresion line (best fitting line) from provided points. Click the plot area to add a point. Click a point to remove it.</p>
+					<p>Regresion line is created from 80% of the observations, the remaining 20% is used to test the accurancy of the model.</p>
+					<div id="regression_chart" style="height: 600px; margin: 0 auto"></div>
+					<br>
+					<button id="clear_points" class="btn btn-default">Clear points</button>	
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	 
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Supervised learning - Classification</h3>
+				</div>
+
+				<div class="panel-body">
+					<p>Using k-nearest neighbors algorythm for statistical classification. Click the plot area to add a point. Click a point to remove it. Points are generated randomly each time you refresh page.</p>
+					
+					<div id="classification_chart" style="height: 600px; margin: 0 auto"></div>
+					<br>
+					<button id="reset_points" class="btn btn-default">Reset points</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	<script type="text/javascript" src="{% static 'js/highcharts.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/HomePage/csrf_library.js' %}"></script>
+	<script type="text/javascript">
+		'use strict';
+
+		let csrftoken = csrfLibrary.getCookie('csrftoken');
+
+		function generateRegressionLine(chart){
+			$.ajax({
+				url: '{% url "scikit_chart:regression_line" %}',
+				type: 'POST',
+				data: JSON.stringify({
+					'observations_x': chart.series[1].xData,
+					'observations_y': chart.series[1].yData,
+				}),
+				processData: false,
+				contentType: false,
+				cache: false,
+				beforeSend: function (xhr, settings) {
+					$("body").css("cursor", "wait");
+					if (!csrfLibrary.csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+				},
+				success: function(data) {
+					let newData = data.regression_line;
+					chart.series[0].setData(newData);
+					chart.setTitle({ text: `Accuracy: ${data.accuracy}`});
+				},
+				error: function() {
+					console.log('AJAX ERROR');
+				},
+				complete: function() {
+					$("body").css("cursor", "default");
+				}
+			});
+		}
+
+
+
+		let regressionChart = Highcharts.chart('regression_chart', {
+			chart: {
+				type: 'scatter',
+				margin: [70, 50, 60, 80],
+				spacingBottom: 15,
+				spacingLeft: 10,
+				spacingRight: 10,
+				spacingTop: 10,
+				events: {
+					click: function (e) {
+						// find the clicked values and the series
+						let x = e.xAxis[0].value;
+						let y = e.yAxis[0].value;
+						let series = this.series[1];
+
+						// Add it
+						series.addPoint([x, y]);
+						if (series.data.length >= 10) {
+							generateRegressionLine(regressionChart);
+						}
+					}
+				}
+			},
+			title: {
+				text: 'Please consider to add at least ten points',
+				style: {
+					fontSize:'23px',
+				}
+			},
+			subtitle: {
+				text: null,
+				style: {
+					fontSize:'15px',
+					verticalAlign: "top",
+				}
+			},
+			xAxis: {
+				title: {
+					text: null,
+				},
+				labels: {
+					style: {
+						fontSize:'25px',
+					}
+				},
+				gridLineWidth: 1,
+				minPadding: 0.4,
+				maxPadding: 0.4,
+				maxZoom: 60,
+				min: -100,
+				max: 100,
+			},
+			yAxis: {
+				title: {
+					text: null,
+				},
+				labels: {
+					style: {
+						fontSize:'25px',
+					}
+				},
+				minPadding: 0.4,
+				maxPadding: 0.4,
+				maxZoom: 60,
+				min: -100,
+				max: 100,
+			},
+			legend: {
+				enabled: false,
+			},
+			exporting: {
+				enabled: false,
+				scale: 1,
+				sourceHeight: 1080,
+				sourceWidth: 1920,
+			},
+			plotOptions: {
+				series: {
+					stickyTracking: false,
+					point: {
+						events: {
+							'click': function () {
+								if (this.series.data.length > 10) {
+									this.remove();
+									generateRegressionLine(regressionChart);
+								}
+								else {
+									this.remove();
+									regressionChart.setTitle({text: 'Please consider to add at least ten points'});
+									regressionChart.series[0].setData(null);
+								}
+							}
+						}
+					}
+				}
+			},
+			series: [
+				{
+					type: 'line',
+					name: 'Regression Line',
+					data: [],
+					marker: {
+						enabled: false
+					},
+					states: {
+						hover: {
+							lineWidth: 0
+						}
+					},
+					enableMouseTracking: false
+				},
+				{
+					type: 'scatter',
+					name: 'Observations',
+					data: null,
+					marker: {
+						radius: 4,
+					},
+				}
+				
+			]
+		});
+
+
+
+		function generateKNearestNeighborns(chart, new_point){
+			$.ajax({
+				url: '{% url "scikit_chart:k_nearest_neighborns" %}',
+				type: 'POST',
+				data: JSON.stringify({
+					'group_1_x': chart.series[0].xData,
+					'group_1_y': chart.series[0].yData,
+					'group_2_x': chart.series[1].xData,
+					'group_2_y': chart.series[1].yData,
+					'group_3_x': chart.series[2].xData,
+					'group_3_y': chart.series[2].yData,
+					'new_point': new_point,
+				}),
+				processData: false,
+				contentType: false,
+				cache: false,
+				beforeSend: function (xhr, settings) {
+					$("body").css("cursor", "wait");
+					if (!csrfLibrary.csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+				},
+				success: function(data) {
+					chart.series[data.group].addPoint(new_point);
+					chart.setTitle({text: `Confidence of the added point: ${data.confidence}`});
+				},
+				error: function() {
+					console.log('AJAX ERROR');
+				},
+				complete: function() {
+					$("body").css("cursor", "default");
+				}
+			});
+		}
+
+
+
+		let classificationChart = Highcharts.chart('classification_chart', {
+			chart: {
+				type: 'scatter',
+				margin: [70, 50, 60, 80],
+				spacingBottom: 15,
+				spacingLeft: 10,
+				spacingRight: 10,
+				spacingTop: 10,
+				events: {
+					click: function (e) {
+						// find the clicked values
+						let x = e.xAxis[0].value;
+						let	y = e.yAxis[0].value;
+
+						// classify point
+						generateKNearestNeighborns(classificationChart, [x, y]);
+					}
+				}
+			},
+			title: {
+				text: null,
+				style: {
+					fontSize:'23px',
+				}
+			},
+			subtitle: {
+				text: null,
+				style: {
+					fontSize:'15px',
+					verticalAlign: "top",
+				}
+			},
+			xAxis: {
+				title: {
+					text: null,
+				},
+				labels: {
+					style: {
+						fontSize:'25px',
+					}
+				},
+				gridLineWidth: 1,
+				minPadding: 0.4,
+				maxPadding: 0.4,
+				maxZoom: 60,
+				min: -100,
+				max: 100,
+			},
+			yAxis: {
+				title: {
+					text: null,
+				},
+				labels: {
+					style: {
+						fontSize:'25px',
+					}
+				},
+				minPadding: 0.4,
+				maxPadding: 0.4,
+				maxZoom: 60,
+				min: -100,
+				max: 100,
+			},
+			legend: {
+				enabled: false,
+			},
+			plotOptions: {
+				series: {
+					stickyTracking: false,
+					point: {
+						events: {
+							'click': function () {
+								if (this.series.data.length > 20) {
+									this.remove();
+								}
+								else {
+									classificationChart.setTitle({text: 'Every group should have at least 20 samples'});
+								}
+							}
+						}
+					}
+				}
+			},
+			series: [
+				{
+					name: 'Group 1',
+					color: 'rgba(223, 83, 83, .5)',
+					data: {{ group_1 }},
+					marker: {
+						radius: 9,
+					},
+				},
+				{
+					name: 'Group 2',
+					color: 'rgba(100,149,237, .5)',
+					data: {{ group_2 }},
+					marker: {
+						radius: 9,
+					},
+				},
+				{
+					name: 'Group 3',
+					color: 'rgba(50,205,50, .5)',
+					data: {{ group_3 }},
+					marker: {
+						radius: 9,
+						symbol: 'triangle-down',
+					},
+				}
+			]
+		});
+
+		$('#clear_points').on('click', function() {
+			regressionChart.series[0].setData(null);
+			regressionChart.series[1].setData(null);
+			regressionChart.setTitle({text: 'Please consider to add at least ten points'});
+		})
+
+		$('#reset_points').on('click', function() {
+			classificationChart.series[0].setData({{ group_1 }});
+			classificationChart.series[1].setData({{ group_2 }});
+			classificationChart.series[2].setData({{ group_3 }});
+			classificationChart.setTitle({text: null});
+		})
+
+	</script>
+{% endblock %}

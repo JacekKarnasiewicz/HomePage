@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load utility_tags %}
+
+{% block jumbotron %}
+	<h1>{{ current_app.name }}</h1>
+	<p class="lead">{{ current_app.description|safe }}</p>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Plot Graph (pick one plotting option and choose the file format, style, title and labels)</h3>
+				</div>
+
+				<div class="panel-body">
+					<form method="POST" action="" enctype="multipart/form-data">
+						{% csrf_token %}
+
+						{% for error in form.non_field_errors %}
+							<div class="alert alert-danger alert-dismissible fade in" role="alert">
+  								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  								<strong>Warning!</strong> {{ error }}
+							</div>
+						{% endfor %}
+						
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field form.file %}
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field form.custom_pattern affix_addon='f(x) = ' %}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									{% form_field form.min_value %}
+								</div>
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									{% form_field form.max_value %}
+								</div>
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									{% form_field form.step %}
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field form.random checkbox_text='Check this option for random output - different data(min, max and step values) and functions' %}
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field form.extension %}
+								</div>
+							</div>
+
+							<br>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field form.style %}
+								</div>
+							</div>
+
+							<br>
+
+							<div class="row">
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									{% form_field form.title %}
+								</div>
+
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									{% form_field form.x_label %}
+								</div>
+
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									{% form_field form.y_label %}
+								</div>
+							</div>
+
+							<br>
+						</fieldset>
+
+						<footer>
+							<input class="btn btn-primary" type="submit" name="submit" value="Generate Graph">
+							<a class="btn btn-default" href="">Reset Form</a>
+						</footer>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+	'use strict';
+	$(document).ready(function() {
+		setTimeout(function(){
+			$('.alert').alert('close');
+		}, 5000);
+	})
+</script>
+{% endblock %}

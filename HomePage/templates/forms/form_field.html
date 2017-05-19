@@ -1,0 +1,103 @@
+{% load utility_tags %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+
+	<label for="{{ field.auto_id }}">
+		{{ field.label|safe }}
+		{% if field.field.required %}<span>*</span>{% endif %}
+	</label>
+
+
+
+
+
+	{% if input_type %}
+		{% if affix_addon %}
+		<div class="input-group">
+			<div class="input-group-addon">{{ affix_addon }}</div>
+		{% endif %}
+		<input
+			id="{{ field.auto_id }}"
+			class="form-control"
+			name="{{ field.html_name }}"
+			type="{{ input_type }}"
+			{% if field.field.widget.attrs.placeholder %}placeholder="{{field.field.widget.attrs.placeholder }}"{% endif %}
+			{% if field.field.widget.attrs.step %}step="{{ field.field.widget.attrs.step }}"{% endif %}
+			{% if field.field.max_length %}maxlength="{{ field.field.max_length }}"{% endif %}
+			{% if field.field.min_value %}min_value="{{ field.field.min_value }}"{% endif %}
+			{% if field.field.max_value %}max_value="{{ field.field.max_value }}"{% endif %}
+			{% if field.value %}value="{{ field.value }}"{% endif %}>
+		{% if affix_addon %}</div>{% endif %}
+
+
+	{% elif textarea %}
+		<textarea
+			id="{{ field.auto_id }}"
+			class="form-control"
+			type="text"
+			name="{{ field.html_name }}"
+			{% if field.field.max_length %}maxlength="{{ field.field.maxlength }}"{% endif %}
+			{{ attrs }}>
+			{% if field.value %}{{ field.value }}{% endif %}
+		</textarea>
+
+
+	{% elif select %}
+		<select id="{{ field.auto_id }}" class="form-control" name="{{ field.html_name }}">
+			{% for value, text in field.field.choices %}
+				<option value="{{ value }}" {% if value|slugify == field.value %}selected="selected"{% endif %}>{{ text }}</option>
+			{% endfor %}
+		</select>
+
+
+	{% elif checkbox %}
+		<div class="checkbox">
+			<label>
+				<input id="{{ field.auto_id }}" type="checkbox" name="{{ field.html_name }}" {% if field.value == True %}checked{% endif %}>
+				{% if checkbox_text %}{{ checkbox_text }}{% endif %}
+			</label>
+		</div>
+
+
+	{% elif radio_input %}
+		{% for value, text in field.field.choices %}
+			<div class="radio">
+				<label>
+					<input id="{{ field.auto_id }}_{{ value }}" type="radio" name="{{ field.html_name }}" value="{{ value }}" {% if value == field.value %}checked{% endif %}>
+					{{ text }}
+				</label>
+			</div>
+		{% endfor %}
+
+	{% elif file_input %}
+		<div class="input-group">
+			<label class="input-group-btn">
+				<span class="btn btn-primary">
+					Browse
+					<input
+						id="{{ field.auto_id }}"
+						type="file"
+						name="{{ field.html_name }}"
+						style="display: none;"
+						onchange="document.getElementById('upload-file-info').value = this.value;"
+						{{ attrs }}>
+				</span>
+			</label>
+			<input id="upload-file-info" type="text" class="form-control" readonly>
+		</div>
+	{% endif %}
+
+
+
+
+
+	{% if field.help_text %}
+		<p class="help-block">{{ field.help_text|safe }}</p>
+	{% endif %}
+
+	{% for error in field.errors %}
+		<span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-block">
+			<strong>{{ error }}</strong>
+		</span>
+	{% endfor %}
+
+</div>

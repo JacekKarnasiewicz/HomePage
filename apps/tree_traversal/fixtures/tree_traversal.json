@@ -1,0 +1,146 @@
+[
+{
+  "model": "tree_traversal.catalog",
+  "pk": 8,
+  "fields": {
+    "name": "Food",
+    "parent": null,
+    "lft": 1,
+    "rght": 8,
+    "tree_id": 2,
+    "level": 0
+  }
+},
+{
+  "model": "tree_traversal.catalog",
+  "pk": 41,
+  "fields": {
+    "name": "Root",
+    "parent": null,
+    "lft": 1,
+    "rght": 6,
+    "tree_id": 7,
+    "level": 0
+  }
+},
+{
+  "model": "tree_traversal.catalog",
+  "pk": 73,
+  "fields": {
+    "name": "Proteins",
+    "parent": 8,
+    "lft": 2,
+    "rght": 3,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "tree_traversal.catalog",
+  "pk": 74,
+  "fields": {
+    "name": "Carbohydrate",
+    "parent": 8,
+    "lft": 4,
+    "rght": 5,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "tree_traversal.catalog",
+  "pk": 75,
+  "fields": {
+    "name": "Fats",
+    "parent": 8,
+    "lft": 6,
+    "rght": 7,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "tree_traversal.catalog",
+  "pk": 76,
+  "fields": {
+    "name": "And Whatnot",
+    "parent": 41,
+    "lft": 2,
+    "rght": 3,
+    "tree_id": 7,
+    "level": 1
+  }
+},
+{
+  "model": "tree_traversal.catalog",
+  "pk": 77,
+  "fields": {
+    "name": "Miscellaneous",
+    "parent": 41,
+    "lft": 4,
+    "rght": 5,
+    "tree_id": 7,
+    "level": 1
+  }
+},
+{
+  "model": "tree_traversal.item",
+  "pk": 31,
+  "fields": {
+    "name": "Halibut",
+    "link": "https://en.wikipedia.org/wiki/Atlantic_halibut",
+    "description": "Really tasty fish",
+    "catalog": 73
+  }
+},
+{
+  "model": "tree_traversal.item",
+  "pk": 32,
+  "fields": {
+    "name": "Tempeh",
+    "link": "https://en.wikipedia.org/wiki/Tempeh",
+    "description": "Fermented soya",
+    "catalog": 73
+  }
+},
+{
+  "model": "tree_traversal.item",
+  "pk": 33,
+  "fields": {
+    "name": "Linseed oil",
+    "link": "https://en.wikipedia.org/wiki/Linseed_oil",
+    "description": "Super healthy stuff",
+    "catalog": 75
+  }
+},
+{
+  "model": "tree_traversal.item",
+  "pk": 34,
+  "fields": {
+    "name": "Almonds",
+    "link": "https://en.wikipedia.org/wiki/Almond",
+    "description": "Good snack",
+    "catalog": 75
+  }
+},
+{
+  "model": "tree_traversal.item",
+  "pk": 35,
+  "fields": {
+    "name": "Potatos",
+    "link": "https://en.wikipedia.org/wiki/Potato",
+    "description": "Nice and tasty dose of carbohydrates",
+    "catalog": 74
+  }
+},
+{
+  "model": "tree_traversal.item",
+  "pk": 36,
+  "fields": {
+    "name": "Barley",
+    "link": "https://en.wikipedia.org/wiki/Barley",
+    "description": "A lot of everything",
+    "catalog": 74
+  }
+}
+]
