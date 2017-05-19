@@ -14,6 +14,8 @@ import os
 from random import choice
 from string import printable
 
+import dj_database_url
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -162,3 +164,8 @@ CHANNEL_LAYERS = {
         'ROUTING': 'HomePage.routing.channel_routing',
     }
 }
+
+# Heroku
+# Update database configuration with $DATABASE_URL.
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)

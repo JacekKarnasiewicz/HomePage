@@ -8,6 +8,7 @@ constantly==15.1.0
 coverage==4.3.4
 cycler==0.10.0
 daphne==1.2.0
+dj-database-url==0.4.2
 Django==1.10
 django-mptt==0.8.7
 incremental==16.10.1
