@@ -3,6 +3,7 @@ body {
 	font-family:"Comic Sans MS", cursive, sans-serif;
 	padding-top: 20px;
 	padding-bottom: 20px;
+	min-width: 341px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -188,4 +189,9 @@ input[type="number"] {
 /* Scroll for tree traversal application */
 #tree_contener {
 	overflow-x: scroll;
+}
+
+/* Menu icon-bar color*/
+.navbar-toggle .icon-bar {
+	background-color: #777;
 }

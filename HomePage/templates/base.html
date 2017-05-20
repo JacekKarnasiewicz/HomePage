@@ -8,9 +8,9 @@
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 		<meta name="description" content="">
 		<meta name="author" content="">
-		<link rel="icon" href="{% static 'icons/Laboratory 3.ico' %}">
+		<link rel="icon" href="{% static 'icons/Potion.ico' %}">
 
-		<title>Icon/Project name/Jacek Karnasiewicz Abstract IT</title>
+		<title>Jacek Karnasiewicz</title>
 
 		<!-- Bootstrap core CSS -->
 		<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -35,15 +35,23 @@
 		<div class="container">
 			<!-- Navigation -->
 			<div class="header clearfix">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+		              	<span class="icon-bar"></span>
+		              	<span class="icon-bar"></span>
+		              	<span class="icon-bar"></span>
+		            </button>
+					<span class="navbar-brand text-muted"">Jacek Karnasiewicz</span>
+				</div>
 				<nav>
-					<ul class="nav nav-pills pull-right">
+					<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav nav-pills navbar-right">
 						<li id="search_btn" role="presentation" class="active"><a href="{% url 'search_app:search_app' %}">Search App's</a></li>
 						<li id="about_btn" role="presentation" ><a data-toggle="modal" data-target="#myModal" href="#">About/Contact</a></li>
 					</ul>
+					</div>
 				</nav>
-				<h3 class="text-muted">
-					Jacek Karnasiewicz
-				</h3>
 			</div>
 
 			<!-- Jumbotron -->
