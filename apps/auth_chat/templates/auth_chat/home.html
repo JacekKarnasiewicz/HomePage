@@ -149,10 +149,11 @@
 		'use strict';
 		$(document).ready(function() {
 			{% if request.user.is_authenticated %}
-				let socket = new WebSocket('ws://' + window.location.host + '/users/');
+				let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+				let socket = new WebSocket(ws_scheme + '://' + window.location.host + '/users/');
 
 				socket.onopen = function open() {
-				  console.log('WebSockets connection created.');
+					console.log('WebSockets connection created.');
 				};
 
 				socket.onmessage = function message(event) {
