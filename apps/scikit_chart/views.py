@@ -8,8 +8,10 @@ from sklearn.neighbors import KNeighborsClassifier
 
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
+@ensure_csrf_cookie
 def scikit_chart(request):
 	X, _ = make_blobs(n_samples=60, centers=3, cluster_std=15, n_features=2, shuffle=False, center_box=(-85, 85))
 	group_1, group_2, group_3 = [X[i:i+20] for i in range(0, 59, 20)]
