@@ -17,7 +17,7 @@
   "pk": null,
   "fields": {
     "name": "Search Applications",
-    "description": "Available filter tags:\r\n<br>\r\npython, django, django channels, javascript, css, matplotlib, numpy, pandas, scikit-learn, highcharts, pillow, mptt, template tags, ajax, yield, thread, streaminghttpresponse, context processors, cookies, signals, websocket, authentication, regex, tabindex, chat, codility, julia set, fractals, wallpaper",
+    "description": "Available filter tags:\r\n<br>\r\npython, django, django channels, javascript, css, matplotlib, numpy, pandas, scikit-learn, highcharts, pillow, mptt, template tags, ajax, yield, thread, streaminghttpresponse, context processors, cookies, signals, websocket, redis, daphne, authentication, regex, tabindex, chat, codility, julia set, fractals, wallpaper",
     "tags": "python, django, signals, regex, tabindex, javascript",
     "image": "images/search_app/search_app.png",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/search_app",
@@ -109,7 +109,7 @@
   "fields": {
     "name": "Django Channels with Authetication",
     "description": "Simple general chat that utilize django channels and reddis backend. To use it just create an account (or two) and open two different window browsers.\r\nBy design I don't store any conversation or any information that are put into chat.\r\nSo have fun and be polite :)",
-    "tags": "python, django, javascript, signals, django channels, authentication, websocket, chat",
+    "tags": "python, django, javascript, signals, django channels, authentication, websocket, redis, daphne, chat",
     "image": "images/auth_chat/auth_chat.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/auth_chat",
     "url_name": "auth_chat",
