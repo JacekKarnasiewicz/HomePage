@@ -29,7 +29,7 @@ SECRET_KEY = "".join(choice(printable) for i in range(50))
 COOKIES_KEY = "".join(choice(printable) for i in range(20))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
