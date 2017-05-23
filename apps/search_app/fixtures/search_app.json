@@ -19,7 +19,7 @@
     "name": "Search Applications",
     "description": "Available filter tags:\r\n<br>\r\npython, django, django channels, javascript, css, matplotlib, numpy, pandas, scikit-learn, highcharts, pillow, mptt, template tags, ajax, yield, thread, streaminghttpresponse, context processors, cookies, signals, websocket, redis, daphne, authentication, regex, tabindex, chat, codility, julia set, fractals, wallpaper",
     "tags": "python, django, signals, regex, tabindex, javascript",
-    "image": "images/search_app/search_app.png",
+    "image": "images/search_app/search_app.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/search_app",
     "url_name": "search_app",
     "visible": true

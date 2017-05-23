@@ -154,7 +154,7 @@ STATICFILES_DIRS = [
 ]
 
 # Whitenoise - simplified static file serving
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 MEDIA_URL = '/media/'
