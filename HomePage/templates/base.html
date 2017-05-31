@@ -4,6 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- The viewport is the user's visible area of a web page. -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 		<meta name="description" content="">
@@ -47,7 +48,7 @@
 				<nav>
 					<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav nav-pills navbar-right">
-						<li id="search_btn" role="presentation" class="active"><a href="{% url 'search_app:search_app' %}">Search App's</a></li>
+						<li id="search_btn" role="presentation" class="active"><a href="{% url 'search_app:search_app' %}">Search Apps</a></li>
 						<li id="about_btn" role="presentation" ><a data-toggle="modal" data-target="#myModal" href="#">About/Contact</a></li>
 					</ul>
 					</div>
@@ -80,6 +81,7 @@
 		<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
 		<script type="text/javascript">
+			'use strict';
 			$(document).ready(function() {
 				$('#myModal').on('shown.bs.modal', function () {
 					$('#search_btn, #about_btn').toggleClass('active');

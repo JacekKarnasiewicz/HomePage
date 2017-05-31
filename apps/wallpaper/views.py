@@ -26,7 +26,7 @@ def img_generator(request, form, search_phrase, random=None):
 	else:
 		response = requests.get('https://alpha.wallhaven.cc/search?q={0}&purity=100&sorting=relevance&order=desc&page=1'.format(search_phrase)).text
 
-	data = re.findall('data-src="https://alpha.wallhaven.cc/wallpapers/thumb/small/th-(.+?)" src=', response)[:15]
+	data = re.findall('data-src="https://alpha.wallhaven.cc/wallpapers/thumb/small/th-(.+?)" src=', response)[:12]
 
 	if data:
 		yield '<div class="row thumbnail-flex">'
