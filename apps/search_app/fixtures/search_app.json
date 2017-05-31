@@ -4,7 +4,7 @@
   "pk": null,
   "fields": {
     "name": "Change Styling",
-    "description": "Alternative color styles for the page. Necessary information are stored in cookies.",
+    "description": "Alternative color styles for the page. Necessary information is stored in cookies.",
     "tags": "python, django, css, context processors, cookies",
     "image": "images/change_styling/change_styling.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/change_styling",
@@ -43,7 +43,7 @@
   "pk": null,
   "fields": {
     "name": "Julia Set - Fractals Generator",
-    "description": "<p>Beautiful examples of of 'chaotic' behavior of Julia set.</p>\r\n\r\n<p>Time necessary to generate fractal picture depend heavily on processor speed on server, max iteration and also on width of the picture, thus 1000-width picture with max iteration equal to 50 takes up to 20 seconds, but picture with 3000-width and 255 iterations takes up to couple of minutes - so be patience :).</p>\r\n\r\n<p>Real and Imaginary part is from complex number of c from f(z) = z**2 + c (complex quadratic polynomial)</p>",
+    "description": "<p>Beautiful examples of of 'chaotic' behavior of Julia set.</p>\r\n\r\n<p>Time necessary to generate fractal picture depends heavily on processor speed of server, max iteration and also on width of the picture, thus 1000-width picture with max iteration equal to 50 takes up to 20 seconds, but picture with 3000-width and 255 iterations takes up to a couple of minutes - so be patient :).</p>\r\n\r\n<p>Real and Imaginary part is from complex number of c from f(z) = z**2 + c (complex quadratic polynomial)</p>",
     "tags": "python, django, julia set, fractals, pillow",
     "image": "images/julia_set/julia_set.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/julia_set",
@@ -56,7 +56,7 @@
   "pk": null,
   "fields": {
     "name": "Streaming Wallpapers",
-    "description": "<p>Fun with Yielding, Threading and StreamingHttpResponse ... to get really nice wallpapers from my favorite page with wallpapers - https://alpha.wallhaven.cc/.</p>\r\n<p>Note: In compare to regular HttpResponse or JsonResponse(you can find this approach in my code), a StreamingHttpResponse it's much faster, but it's a little bit clunky e.g. I needed to cut my original base.html in 3 parts, and I couldn't use template inheritance. Any tips or suggestion to make it better will be welcome.\r\n... p.s. socket usage is a technology for different app :)</p>",
+    "description": "<p>Fun with Yielding, Threading and StreamingHttpResponse ... to get really nice wallpapers from my favorite page with wallpapers - https://alpha.wallhaven.cc/.</p>\r\n<p>Note: In comparison to regular HttpResponse or JsonResponse(you can find this approach in my code), a StreamingHttpResponse is much faster, but it's a little bit clunky e.g. I needed to cut my original base.html into 3 parts, and I couldn't use template inheritance. Any tips or suggestion to make it better are welcome.\r\n... p.s. socket usage is a technology for different apps :)</p>",
     "tags": "python, django, yield, thread, streaminghttpresponse, wallpaper",
     "image": "images/wallpaper/wallpaper.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/wallpaper",
@@ -82,7 +82,7 @@
   "pk": null,
   "fields": {
     "name": "Codility Solutions",
-    "description": "My solutions for codility challenges, much appreciation for any help, tips or new ideas that improve my code and help achieve 100% correctness and performance in every task!\r\nIn most cases the correctness is 100%, but performance sometime is really lagging.\r\nGradually I will add next solutions or improve older ones.",
+    "description": "My solutions for codility challenges, much appreciation for any help, tips or new ideas that improve my code and help achieve 100% correctness and performance in every task!\r\nIn most cases the correctness is 100%, but performance sometimes is really lagging.\r\nGradually, I will add new solutions or improve older ones.",
     "tags": "python, django, codility, javascript",
     "image": "images/codility/codility.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/codility",
@@ -108,7 +108,7 @@
   "pk": null,
   "fields": {
     "name": "Django Channels with Authetication",
-    "description": "Simple general chat that utilize django channels and reddis backend. To use it just create an account (or two) and open two different window browsers.\r\nBy design I don't store any conversation or any information that are put into chat.\r\nSo have fun and be polite :)",
+    "description": "Simple general chat that utilizes django channels and reddis backend. To use it just create an account (or two) and open two different window browsers.\r\nBy design I don't store any conversations or any information that is put into the chat.\r\nSo have fun and be polite :)",
     "tags": "python, django, javascript, signals, django channels, authentication, websocket, redis, daphne, chat",
     "image": "images/auth_chat/auth_chat.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/auth_chat",

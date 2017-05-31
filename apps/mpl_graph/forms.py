@@ -16,7 +16,7 @@ class PlotForm(forms.Form):
 		required=False,
 		max_length=64,
 		label='Plot from custom pattern e.g. x**2 - 6*x + 5 (functions from math module are available e.g. sqrt, sin, floor)',
-		help_text='Have fun and good luck ...and if you manage to destroy my app, please tell me how did you do that :), and I will try to fix that')
+		help_text='Have fun and good luck ...and if you manage to destroy my app, please tell me how you did that :)')
 	min_value = forms.FloatField(
 		required=False,
 		label='Min value of x',
