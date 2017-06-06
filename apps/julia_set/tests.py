@@ -14,7 +14,7 @@ class FormTest(TestCase):
 		self.assertIn('width', form.errors)
 
 	def test_JuliaSetForm_default_data(self):
-		form = JuliaSetForm(data={'width': '3000'})
+		form = JuliaSetForm(data={'width': '1500'})
 
 		self.assertTrue(form.is_valid())
 
@@ -44,12 +44,12 @@ class FormTest(TestCase):
 		self.assertIn('sample', form.errors)
 
 	def test_JuliaSetForm_valid_sample(self):
-		form = JuliaSetForm(data={'width': '3000', 'sample': 'stars'})
+		form = JuliaSetForm(data={'width': '1500', 'sample': 'stars'})
 
 		self.assertTrue(form.is_valid())
 
 	def test_JuliaSetForm_invalid_sample(self):
-		form = JuliaSetForm(data={'width': '3000', 'sample': 'unicorn'})
+		form = JuliaSetForm(data={'width': '1500', 'sample': 'unicorn'})
 
 		self.assertFalse(form.is_valid())
 		self.assertIn('sample', form.errors)

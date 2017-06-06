@@ -18,7 +18,7 @@ class JuliaSetForm(forms.Form):
 		required=True,
 		initial='1000',
 		label='Choose picture width',
-		choices=(('1000', '1000 (lowest quality and the fastest time to generate)'), ('2000', '2000'), ('3000', '3000 (highest quality and the slowest time to generate)')),
+		choices=(('1000', '1000 (lowest quality and the fastest time to generate)'), ('1500', '1500'), ('2000', '2000 (highest quality and the slowest time to generate)')),
 		widget=forms.RadioSelect)
 	max_iterations = forms.IntegerField(
 		required=False,

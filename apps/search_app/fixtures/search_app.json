@@ -43,7 +43,7 @@
   "pk": null,
   "fields": {
     "name": "Julia Set - Fractals Generator",
-    "description": "<p>Beautiful examples of of 'chaotic' behavior of Julia set.</p>\r\n\r\n<p>Time necessary to generate fractal picture depends heavily on processor speed of server, max iteration and also on width of the picture, thus 1000-width picture with max iteration equal to 50 takes up to 20 seconds, but picture with 3000-width and 255 iterations takes up to a couple of minutes - so be patient :).</p>\r\n\r\n<p>Real and Imaginary part is from complex number of c from f(z) = z**2 + c (complex quadratic polynomial)</p>",
+    "description": "<p>Beautiful examples of of 'chaotic' behavior of Julia set.</p>\r\n\r\n<p>Time necessary to generate fractal picture depends heavily on processor speed of server, max iteration and also on width of the picture, thus 1000-width picture with max iteration equal to 50 takes up to 20 seconds, but picture with 2000-width and 255 iterations takes up to a couple of minutes - so be patient :).</p>\r\n\r\n<p>Real and Imaginary part is from complex number of c from f(z) = z**2 + c (complex quadratic polynomial)</p>",
     "tags": "python, django, julia set, fractals, pillow",
     "image": "images/julia_set/julia_set.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/julia_set",
