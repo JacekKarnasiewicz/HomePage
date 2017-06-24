@@ -25,8 +25,8 @@ SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # * Trying new approach with random keys, I think the only downside would be with signed cookies
-SECRET_KEY = "".join(choice(printable) for i in range(50))
-COOKIES_KEY = "".join(choice(printable) for i in range(20))
+SECRET_KEY = "\x0c+zOGIVd5gnOM2V!|E1[TxhHi]@I'eDst*H h#C$pq a[pUzq\t"
+COOKIES_KEY = 'U\r^h\nrjj]L9z=}GcM\nFq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 	'apps.wallpaper',
 	'apps.scikit_chart',
 	'apps.auth_chat',
+	'apps.password_manager',
 ]
 
 MIDDLEWARE = [

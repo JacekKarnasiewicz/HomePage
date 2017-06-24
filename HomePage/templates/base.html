@@ -83,13 +83,10 @@
 		<script type="text/javascript">
 			'use strict';
 			$(document).ready(function() {
-				$('#myModal').on('shown.bs.modal', function () {
+				$('#myModal').on('shown.bs.modal hidden.bs.modal', function () {
 					$('#search_btn, #about_btn').toggleClass('active');
 
-				})
-				$('#myModal').on('hidden.bs.modal', function () {
-						$('#search_btn, #about_btn').toggleClass('active');
-				})
+				})			
 			});
 		</script>
 

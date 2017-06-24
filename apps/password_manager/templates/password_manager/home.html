@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block jumbotron %}
+	<h1>{{ current_app.name }}</h1>
+	<p class="lead">{{ current_app.description|safe }}</p>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<table id="passwordManagerTable" class="table table-striped">
+				{% include 'password_manager/table.html' %}
+			</table>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<a class="btn btn-primary" data-toggle="modal" data-target="#formModal" href="#">Add Password</a>
+		</div>
+	</div>
+
+	<!-- Modal -->
+
+	<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div id="modalContent" class="modal-dialog" role="document">
+			{% include 'password_manager/form_modal.html' %}
+		</div>
+	</div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+	'use strict';
+	$(document).ready(function() {
+		// ajax
+		$('#formModal').on('submit', 'form', function(e){
+			e.preventDefault();
+
+			let form_data = new FormData(this);
+			// form_data.set('form_name', this[this.length-1].name);
+			console.log(this);
+			
+			$.ajax({
+				url: {% url 'password_manager:password_manager' %},
+				type: 'POST',
+				data: form_data,
+				processData: false,
+				contentType: false,
+				cache: false,
+				beforeSend: function () {
+					$("body").css("cursor", "wait");
+				},
+				success: function(data) {
+					$('#modalContent').html(data.form_template);
+					if(!data.errors){
+						$('#passwordManagerTable').html(data.table_template);
+						$('#formModal').modal('hide');
+					}
+				},
+				error: function() {
+					console.log('AJAX ERROR');
+				},
+				complete: function() {
+					$("body").css("cursor", "default");
+				}
+			});
+		});
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+
+<thead>
+	<tr>
+		<th></th>
+		<th>Site name</th>
+		<th>Site URL</th>
+		<th>Login account name</th>
+		<th>Login password</th>
+		<th></th>
+		<th></th>
+
+	</tr>
+</thead>
+<tbody>
+	{% for obj in password_manager %}
+	<tr>
+		<td><b>{{ forloop.counter }}</b></td>
+		<td>{{ obj.site_name }}</td>
+		<td><a href="{{ obj.site_url }}" target="_blank">{{ obj.site_url }}</a></td>
+		<td>{{ obj.login_name }}</td>
+		<td>{{ obj.login_password }}</td>
+		<td>
+			<a class="btn btn-default btn-sm" data-id="{{ obj.pk }}" data-toggle="modal" data-target="#formModal" href="#">Edit</a>
+		</td>
+		<td>
+			<a class="btn btn-default btn-sm" data-id="{{ obj.pk }}" href="#">Delete</a>
+		</td>
+
+	</tr>
+	{% empty %}
+		<tr>
+			<td colspan="6" class="text-center">Sorry, no passwords available yet.</td>
+		</tr>
+	{% endfor %}
+</tbody>
+
+
+<!-- <pre style="white-space: pre-wrap;">asdasdasdapsjdasdaspodjasdaspodjasdasdasda</pre> -->

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 	'apps.wallpaper',
 	'apps.scikit_chart',
 	'apps.auth_chat',
+	'apps.password_manager',
 ]
 
 MIDDLEWARE = [
