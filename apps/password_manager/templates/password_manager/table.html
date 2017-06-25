@@ -1,4 +1,3 @@
-
 <thead>
 	<tr>
 		<th></th>
@@ -18,12 +17,12 @@
 		<td>{{ obj.site_name }}</td>
 		<td><a href="{{ obj.site_url }}" target="_blank">{{ obj.site_url }}</a></td>
 		<td>{{ obj.login_name }}</td>
-		<td>{{ obj.login_password }}</td>
+		<td>{{ obj.login_password.decrypt_login_password }}</td>
 		<td>
-			<a class="btn btn-default btn-sm" data-id="{{ obj.pk }}" data-toggle="modal" data-target="#formModal" href="#">Edit</a>
+			<a class="btn btn-default btn-sm edit" data-id="{{ obj.pk }}" data-toggle="modal" data-target="#formModal" href="#">Edit</a>
 		</td>
 		<td>
-			<a class="btn btn-default btn-sm" data-id="{{ obj.pk }}" href="#">Delete</a>
+			<button class="btn btn-default btn-sm delete" data-id="{{ obj.pk }}">Delete</button>
 		</td>
 
 	</tr>

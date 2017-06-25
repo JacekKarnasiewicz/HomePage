@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block jumbotron %}
 	<h1>{{ current_app.name }}</h1>
@@ -18,15 +19,14 @@
 
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<a class="btn btn-primary" data-toggle="modal" data-target="#formModal" href="#">Add Password</a>
+			<a id="addNewPassword" class="btn btn-primary" data-toggle="modal" data-target="#formModal" href="#">Add New Password</a>
 		</div>
 	</div>
 
 	<!-- Modal -->
-
 	<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div id="modalContent" class="modal-dialog" role="document">
-			{% include 'password_manager/form_modal.html' %}
+			
 		</div>
 	</div>
 
@@ -35,33 +35,50 @@
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript" src="{% static 'js/HomePage/csrf_library.js' %}"></script>
 <script type="text/javascript">
 	'use strict';
 	$(document).ready(function() {
-		// ajax
-		$('#formModal').on('submit', 'form', function(e){
-			e.preventDefault();
 
-			let form_data = new FormData(this);
-			// form_data.set('form_name', this[this.length-1].name);
-			console.log(this);
-			
+		// get new password form
+		$('#addNewPassword').on('click', function(e){
+			e.preventDefault();
+			$.getJSON("{% url 'password_manager:create_password' %}", function(data) {
+				console.log(data.form_template);
+				$('#modalContent').html(data.form_template);
+			});
+		})
+
+
+		// get edit password form
+		$('#passwordManagerTable').on('click', '.edit', function(e){
+			e.preventDefault();
+			$.getJSON("{% url 'password_manager:edit_password' password_pk=12345 %}".replace(/12345/, this.dataset.id.toString()), function(data) {
+				console.log(data.form_template);
+				$('#modalContent').html(data.form_template);
+			});
+		});
+
+
+		// delete password entry
+		let csrftoken = csrfLibrary.getCookie('csrftoken');
+
+		$('#passwordManagerTable').on('click', '.delete', function(e){
 			$.ajax({
-				url: {% url 'password_manager:password_manager' %},
+				url: "{% url 'password_manager:delete_password' %}",
 				type: 'POST',
-				data: form_data,
+				data: JSON.stringify({'id': this.dataset.id}),
 				processData: false,
 				contentType: false,
 				cache: false,
-				beforeSend: function () {
+				beforeSend: function (xhr, settings) {
 					$("body").css("cursor", "wait");
+					if (!csrfLibrary.csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
 				},
 				success: function(data) {
-					$('#modalContent').html(data.form_template);
-					if(!data.errors){
-						$('#passwordManagerTable').html(data.table_template);
-						$('#formModal').modal('hide');
-					}
+					$('#passwordManagerTable').html(data.table_template);
 				},
 				error: function() {
 					console.log('AJAX ERROR');
