@@ -1,5 +1,6 @@
 import base64
 
+# pycryptodome
 from Crypto import Random
 from Crypto.Cipher import AES
 
@@ -17,22 +18,23 @@ class PasswordManager(models.Model):
 
 	# encryption
 	# secret_key = settings.CIPHER_SECRET_KEY
-	secret_key = settings.SECRET_KEY
+	# secret_key = settings.SECRET_KEY
+	# secret_key = "OGIVd5gnOM2V!|E1[TxhHi]@I'eDst*H h#C$pq a[pUzq\t"
+	secret_key = "d5gnOM2V!|E1[TxhHi]@I'eDst*Ha[zq"
 	block_size = AES.block_size
 
 	def encrypt_login_password(self):
 		cls = self.__class__
-		raw = self.pad(self.login_password)
+		raw = self.pad(self.login_password).encode(encoding='utf-8', errors='strict')
 		iv = Random.new().read(cls.block_size)
 		cipher = AES.new(cls.secret_key.encode(encoding='utf-8', errors='strict'), AES.MODE_CBC, iv)
 		return base64.b64encode(iv + cipher.encrypt(raw))
 
 	def decrypt_login_password(self):
 		cls = self.__class__
-		# try decode
 		enc = base64.b64decode(self.login_password)
 		iv = enc[:cls.block_size]
-		cipher = AES.new(cls.secret_key, AES.MODE_CBC, iv)
+		cipher = AES.new(cls.secret_key.encode(encoding='utf-8', errors='strict'), AES.MODE_CBC, iv)
 		return cls.unpad(cipher.decrypt(enc[cls.block_size:]))
 
 	def pad(self, s):

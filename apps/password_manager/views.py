@@ -16,7 +16,6 @@ def password_manager(request):
 
 
 def create_password(request):
-	print('CREATE PASSWORD')
 	ctx = {
 		'password_manager': PasswordManager.objects.filter(owner=request.user.pk),
 		'password_manager_form': PasswordManagerForm()
@@ -40,7 +39,6 @@ def create_password(request):
 
 
 def edit_password(request, password_pk):
-	print('EDIT PASSWORD')
 	obj = get_object_or_404(PasswordManager, pk=password_pk)
 
 	ctx = {
@@ -83,3 +81,7 @@ def delete_password(request):
 			raise Http404('Not Allowed')
 
 	raise Http404('Resource Not Found')
+
+
+def check_password(request):
+	pass
