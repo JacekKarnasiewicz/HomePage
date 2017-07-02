@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load utility_tags %}
+
+{% block jumbotron %}
+	<h1>{{ current_app.name }}</h1>
+	<p class="lead">{{ current_app.description|safe }}</p>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Create User</h3>
+				</div>
+				<div class="panel-body">
+					<form method="POST" action="">
+						{% csrf_token %}
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field create_user_form.username %}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field create_user_form.password1 %}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field create_user_form.password2 %}
+								</div>
+							</div>
+						</fieldset>
+						<footer>
+							<input class="btn btn-primary" type="submit" name="create_user_form" value="Create User">
+						</footer>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Log in</h3>
+				</div>
+				<div class="panel-body">
+					<form method="POST" action="">
+						{% csrf_token %}
+
+						{% for error in log_in_form.non_field_errors %}
+						<div class="alert alert-danger alert-dismissible fade in" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<strong>Warning!</strong> {{ error }}
+						</div>
+						{% endfor %}
+
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field log_in_form.username %}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									{% form_field log_in_form.password %}
+								</div>
+							</div>
+
+						</fieldset>
+						<footer>
+							<input class="btn btn-primary" type="submit" name="log_in_form" value="Log in">
+						</footer>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		'use strict';
+		$(document).ready(function() {
+			setTimeout(function(){
+				$('.alert').alert('close');
+			}, 5000);
+
+		})
+	</script>
+{% endblock %}

@@ -1,5 +1,6 @@
 from json import loads
 
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
@@ -9,6 +10,7 @@ from .models import PasswordManager
 from .utilities import CheckPassword
 
 
+@login_required
 def password_manager(request):
 	ctx = {
 		'password_manager': PasswordManager.objects.filter(owner=request.user.pk),
@@ -85,7 +87,6 @@ def delete_password(request):
 
 
 def check_password(request):
-	print('IIINNNNN')
 	if request.method == 'POST' and request.is_ajax():
 		data = loads(request.body.decode('utf-8'))
 		password_object = CheckPassword(data['password'])

@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^scikit_chart/', include('apps.scikit_chart.urls', namespace='scikit_chart', app_name='scikit_chart')),
     url(r'^auth_chat/', include('apps.auth_chat.urls', namespace='auth_chat', app_name='auth_chat')),
     url(r'^password_manager/', include('apps.password_manager.urls', namespace='password_manager', app_name='password_manager')),
+    url(r'^account/', include('apps.account.urls', namespace='account', app_name='account')),
     url(r'^admin/', admin.site.urls),
 ]
 

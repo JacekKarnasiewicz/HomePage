@@ -9,9 +9,11 @@
 {% block content %}
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<table id="passwordManagerTable" class="table table-striped">
-				{% include 'password_manager/table.html' %}
-			</table>
+			<div style="overflow-x:auto;">
+				<table id="passwordManagerTable" class="table table-striped">
+					{% include 'password_manager/table.html' %}
+				</table>
+			</div>
 		</div>
 	</div>
 

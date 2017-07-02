@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 	'apps.scikit_chart',
 	'apps.auth_chat',
 	'apps.password_manager',
+	'apps.account'
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 	},
 ]
 
+LOGIN_URL = 'account:account'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

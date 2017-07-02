@@ -203,3 +203,13 @@ input[type="number"] {
 .navbar-toggle .icon-bar {
 	background-color: #777;
 }
+
+/* Vertical alignment for password manager table */
+#password_manager_table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+/* Progress bar color */
+.progress-bar-success {
+	background-color: #49af49;
+}

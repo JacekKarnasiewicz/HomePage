@@ -66,6 +66,9 @@ class CheckPassword(object):
 	def _calculate_password_strength(cls, bits_of_entropy):
 		return cls.password_strength_options[bisect(cls.breakpoints, bits_of_entropy)]
 
+	# def create_context_dictionary(self):
+	# 	pass
+
 	def get_bits_of_entropy(self):
 		return self.bits_of_entropy
 
