@@ -42,6 +42,12 @@
 							{% form_field password_manager_form.login_password %}
 						</div>
 					</div>
+					
+					<div class="row">
+						<div id="check_password_container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							
+						</div>
+					</div>
 				</fieldset>
 			</form>
 		</p>
@@ -54,6 +60,7 @@
 	</div>
 </div>
 
+
 <script type="text/javascript">
 	// crate new password
 	$('form').on('submit', function(e){
@@ -61,7 +68,6 @@
 
 		let form_data = new FormData(this);
 		// form_data.set('form_name', this[this.length-1].name);
-		console.log(this);
 		
 		$.ajax({
 			{% if object_pk %}
@@ -83,6 +89,8 @@
 					$('#passwordManagerTable').html(data.table_template);
 					$('#formModal').modal('hide');
 				}
+
+				$('#id_login_password').trigger('keyup');
 			},
 			error: function() {
 				console.log('AJAX ERROR');

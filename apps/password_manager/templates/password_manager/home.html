@@ -44,7 +44,6 @@
 		$('#addNewPassword').on('click', function(e){
 			e.preventDefault();
 			$.getJSON("{% url 'password_manager:create_password' %}", function(data) {
-				console.log(data.form_template);
 				$('#modalContent').html(data.form_template);
 			});
 		})
@@ -54,8 +53,8 @@
 		$('#passwordManagerTable').on('click', '.edit', function(e){
 			e.preventDefault();
 			$.getJSON("{% url 'password_manager:edit_password' password_pk=12345 %}".replace(/12345/, this.dataset.id.toString()), function(data) {
-				console.log(data.form_template);
 				$('#modalContent').html(data.form_template);
+				$('#id_login_password').trigger('keyup');
 			});
 		});
 
@@ -79,6 +78,35 @@
 				},
 				success: function(data) {
 					$('#passwordManagerTable').html(data.table_template);
+				},
+				error: function() {
+					console.log('AJAX ERROR');
+				},
+				complete: function() {
+					$("body").css("cursor", "default");
+				}
+			});
+		});
+
+
+		// check password
+
+		$('#formModal').on('keyup', '#id_login_password', function(){
+			$.ajax({
+				url: "{% url 'password_manager:check_password' %}",
+				type: 'POST',
+				data: JSON.stringify({'password': $(this).val()}),
+				processData: false,
+				contentType: false,
+				cache: false,
+				beforeSend: function (xhr, settings) {
+					$("body").css("cursor", "wait");
+					if (!csrfLibrary.csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+				},
+				success: function(data) {
+					$('#check_password_container').html(data.password_template);
 				},
 				error: function() {
 					console.log('AJAX ERROR');

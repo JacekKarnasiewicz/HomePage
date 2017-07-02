@@ -14,9 +14,14 @@ class PasswordManager(models.Model):
 	site_name = models.CharField(max_length=32, unique=True)
 	site_url = models.URLField(max_length=128)
 	login_name = models.CharField(max_length=32)
-	login_password = models.CharField(max_length=128)
+	# add min_length validation
+	login_password = models.CharField(
+		max_length=128,
+		verbose_name='Login password (8-32 characters)',
+		help_text="Password should have at least one lower and upper case letter, at least one number and one special character(e.g. !?.@#$).")
 
 	# encryption
+	# I want to have working git repo, just download and create ve and it's working
 	# secret_key = settings.CIPHER_SECRET_KEY
 	# secret_key = settings.SECRET_KEY
 	# secret_key = "OGIVd5gnOM2V!|E1[TxhHi]@I'eDst*H h#C$pq a[pUzq\t"

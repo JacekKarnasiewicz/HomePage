@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 
 from .forms import PasswordManagerForm
 from .models import PasswordManager
+from .utilities import CheckPassword
 
 
 def password_manager(request):
@@ -84,4 +85,24 @@ def delete_password(request):
 
 
 def check_password(request):
-	pass
+	print('IIINNNNN')
+	if request.method == 'POST' and request.is_ajax():
+		data = loads(request.body.decode('utf-8'))
+		password_object = CheckPassword(data['password'])
+
+		bits_of_entropy = password_object.get_bits_of_entropy()
+		progress_bar_percent = 100 if bits_of_entropy > 100 else bits_of_entropy
+		annotations = password_object.get_annotations()
+		password_strength = password_object.get_password_strength().upper()
+
+		ctx = {
+			'bits_of_entropy': bits_of_entropy,
+			'progress_bar_percent': progress_bar_percent,
+			'annotations': annotations,
+			'password_strength': password_strength
+		}
+
+		password_template = render_to_string('password_manager/password_information.html', request=request, context=ctx)
+		return JsonResponse({'password_template': password_template})
+
+	raise Http404('Resource Not Found')

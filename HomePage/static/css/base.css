@@ -208,3 +208,8 @@ input[type="number"] {
 #password_manager_table > tbody > tr > td {
 	vertical-align: middle;
 }
+
+/* Progress bar color */
+.progress-bar-success {
+	background-color: #51469c;
+}
