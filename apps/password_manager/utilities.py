@@ -23,8 +23,8 @@ class CheckPassword(object):
 
 		# check password length
 		if self.password_length < 8:
-			self.annotations.add('Password must have at least 8 characters')
-			self.password_strength = self._calculate_password_strength(self.bits_of_entropy)
+			self.annotations.add('Password should have at least 8 characters')
+			self.password_strength = cls._calculate_password_strength(self.bits_of_entropy)
 			return
 
 		# check lower and upper case characters
