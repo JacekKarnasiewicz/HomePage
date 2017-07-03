@@ -3,11 +3,6 @@ from math import log2
 from re import search
 from string import punctuation
 
-# models => 8-32 char
-# ommit adding list to db ! and checking all the possibilities
-
-# using bisect is overkill, but i want to try something different from multiple if/elif/else statements
-
 
 class CheckPassword(object):
 	breakpoints = [40, 60, 80, 100]
@@ -62,6 +57,7 @@ class CheckPassword(object):
 		self.bits_of_entropy = log2(self.pool_of_possible_characters) * self.password_length 
 		self.password_strength = cls._calculate_password_strength(self.bits_of_entropy)
 
+	# using bisect is overkill, but i want to try something different from multiple if/elif/else statements
 	@classmethod
 	def _calculate_password_strength(cls, bits_of_entropy):
 		return cls.password_strength_options[bisect(cls.breakpoints, bits_of_entropy)]

@@ -6,8 +6,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from apps.account.views import account
+
 from .consumers import ws_post
-from .forms import CreateUser
 from .models import LoggedInUser
 from .views import auth_chat
 
@@ -74,39 +75,6 @@ class ModelTest(TestCase):
 		self.assertEqual(str(LoggedInUser.objects.get(pk=self.new_user.pk)), self.username)
 
 
-class FormTest(TestCase):
-
-	def test_CreateUser_form_for_empty_data(self):
-		form = CreateUser(data={})
-
-		self.assertFalse(form.is_valid())
-		self.assertIn('username', form.errors)
-		self.assertIn('password1', form.errors)
-		self.assertIn('password2', form.errors)
-
-	def test_CreateUser_form_for_valid_data(self):
-		form = CreateUser(
-			data={
-				'username': 'imaginary_name',
-				'password1': 'fake_password_123',
-				'password2': 'fake_password_123',
-			})
-
-		self.assertTrue(form.is_valid())
-
-	def test_CreateUser_form_for_invalid_data(self):
-		form = CreateUser(
-			data={
-				'username': 'I',
-				'password1': 'I',
-				'password2': 'J',
-			})
-
-		self.assertFalse(form.is_valid())
-		self.assertIn('username', form.errors)
-		self.assertIn('password2', form.errors)
-
-
 class ViewTest(TestCase):
 
 	@classmethod
@@ -115,91 +83,24 @@ class ViewTest(TestCase):
 		cls.password = 'imaginary_password_123'
 		cls.new_user = User.objects.create_user(username=cls.username, password=cls.password)
 
-	def test_auth_chat_page_uses_correct_view(self):
+	def test_auth_chat_page_uses_correct_view_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
 		response = self.client.get(reverse('auth_chat:auth_chat'))
 
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.resolver_match.func, auth_chat)
 
-	def test_auth_chat_page_render_correct_template(self):
+	def test_auth_chat_page_render_correct_template_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
 		response = self.client.get(reverse('auth_chat:auth_chat'))
 
 		self.assertTemplateUsed(response, 'auth_chat/home.html')
 
-	def test_auth_chat_page_uses_correct_forms(self):
+	def test_auth_chat_page_uses_redirect_for_anonymous_user(self):
 		response = self.client.get(reverse('auth_chat:auth_chat'))
 
-		self.assertIsInstance(response.context['create_user_form'], CreateUser)
-		self.assertIsInstance(response.context['log_in_form'], AuthenticationForm)
-
-	def test_auth_chat_page_valid_POST_for_create_user_form(self):
-		response = self.client.post(
-			reverse('auth_chat:auth_chat'),
-			data={
-				'username': 'name',
-				'password1': 'password_123',
-				'password2': 'password_123',
-				'create_user_form': 'Create User',
-			},
-			follow=True)
-
-		self.assertEqual(response.status_code, 200)
-
-		user = auth.get_user(self.client)
-		self.assertEqual(user.username, 'name')
-
-	def test_auth_chat_page_invalid_POST_for_create_user_form(self):
-		response = self.client.post(
-			reverse('auth_chat:auth_chat'),
-			data={
-				'username': 'I',
-				'password1': 'I',
-				'password2': 'J',
-				'create_user_form': 'Create User',
-			})
-
-		self.assertEqual(response.status_code, 200)
-		self.assertIn('username', response.context['create_user_form'].errors)
-		self.assertIn('password2', response.context['create_user_form'].errors)
-
-	def test_auth_chat_page_valid_POST_for_log_in_form(self):
-		response = self.client.post(
-			reverse('auth_chat:auth_chat'),
-			data={
-				'username': self.username,
-				'password': self.password,
-				'log_in_form': 'Log in',
-			},
-			follow=True)
-
-		self.assertEqual(response.status_code, 200)
-
-		logged_in_user = auth.get_user(self.client)
-		self.assertEqual(logged_in_user.username, self.new_user.username)
-
-	def test_auth_chat_page_invalid_POST_for_log_in_form(self):
-		response = self.client.post(
-			reverse('auth_chat:auth_chat'),
-			data={
-				'username': 'fake_name',
-				'password': 'fake_password',
-				'log_in_form': 'Log in',
-			},
-			follow=True)
-
-		self.assertEqual(response.status_code, 200)
-		self.assertIn('__all__', response.context['log_in_form'].errors)
-
-	def test_auth_chat_page_valid_POST_for_logging_out_user(self):
-		self.client.login(username=self.username, password=self.password)
-		self.assertIsInstance(auth.get_user(self.client), User)
-
-		response = self.client.post(
-			reverse('auth_chat:auth_chat'),
-			data={
-				'log_out': 'Log out',
-			},
-			follow=True)
-
-		self.assertEqual(response.status_code, 200)
-		self.assertIsInstance(auth.get_user(self.client), auth.models.AnonymousUser)
+		self.assertRedirects(response, '/account/?next=/auth_chat/', status_code=302, target_status_code=200)
