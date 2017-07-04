@@ -18,6 +18,7 @@ def password_manager(request):
 	return render(request, 'password_manager/home.html', ctx)
 
 
+@login_required
 def create_password(request):
 	ctx = {
 		'password_manager': PasswordManager.objects.filter(owner=request.user.pk),
@@ -40,7 +41,7 @@ def create_password(request):
 	return JsonResponse({'form_template': form_template})
 
 
-
+@login_required
 def edit_password(request, password_pk):
 	obj = get_object_or_404(PasswordManager, pk=password_pk)
 
@@ -70,6 +71,7 @@ def edit_password(request, password_pk):
 	return JsonResponse({'form_template': form_template})
 
 
+@login_required
 def delete_password(request):
 	if request.method == 'POST' and request.is_ajax():
 		data = loads(request.body.decode('utf-8'))
@@ -86,6 +88,7 @@ def delete_password(request):
 	raise Http404('Resource Not Found')
 
 
+@login_required
 def check_password(request):
 	if request.method == 'POST' and request.is_ajax():
 		data = loads(request.body.decode('utf-8'))

@@ -1,9 +1,14 @@
+from json import dumps
+
 from django.contrib import auth
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from .forms import PasswordManagerForm
 from .models import PasswordManager
 from .utilities import CheckPassword
+from .views import password_manager
 
 User = auth.get_user_model()
 
@@ -120,8 +125,408 @@ class ModelTest(TestCase):
 
 
 class FormTest(TestCase):
-	pass
+
+	@classmethod
+	def setUpTestData(cls):
+		cls.username = 'bogus_name'
+		cls.password = 'bogus_password_123'
+		cls.new_user = User.objects.create_user(username=cls.username, password=cls.password)
+
+		cls.login_password = 'imaginary_password'
+		cls.pass_obj = PasswordManager.objects.create(owner=cls.new_user, site_name='imaginary_name',
+			site_url='http://example.com', login_name='imaginary_login', login_password=cls.login_password)
+
+	def test_PasswordManagerForm_for_empty_data(self):
+		form = PasswordManagerForm(data={})
+
+		self.assertFalse(form.is_valid())
+		self.assertIn('site_name', form.errors)
+		self.assertIn('site_url', form.errors)
+		self.assertIn('login_name', form.errors)
+		self.assertIn('login_password', form.errors)
+
+	def test_PasswordManagerForm_for_valid_data(self):
+		form = PasswordManagerForm(
+			data={
+				'site_name': 'fake_name',
+				'site_url': 'http://example.com',
+				'login_name': 'fake_login',
+				'login_password':'fake_password'
+			})
+
+		self.assertTrue(form.is_valid())
+
+	def test_PasswordManagerForm_for_invalid_data(self):
+		form = PasswordManagerForm(
+			data={
+				'site_name': 'fake_name'*4,
+				'site_url': 'example',
+				'login_name': 'fake_login'*4,
+				'login_password': 'fake_password'*10
+			})
+
+		self.assertFalse(form.is_valid())
+		self.assertIn('site_name', form.errors)
+		self.assertIn('site_url', form.errors)
+		self.assertIn('login_name', form.errors)
+		self.assertIn('login_password', form.errors)
+
+	def test_PasswordManagerForm_init_method_for_decrypting_login_password(self):
+		form = PasswordManagerForm(instance=self.pass_obj)
+
+		self.assertEqual(form.initial['login_password'], self.login_password)
+
+	def test_PasswordManagerForm_save_method(self):
+		site_name = 'fake_name'
+		form = PasswordManagerForm(
+			data={
+				'site_name': site_name,
+				'site_url': 'http://example.com',
+				'login_name': 'fake_login',
+				'login_password':'fake_password'
+			})
+
+		self.assertTrue(form.is_valid())
+
+		form.save(owner=self.new_user)
+		new_pass_obj = PasswordManager.objects.get(site_name=site_name)
+
+		self.assertTrue(new_pass_obj.owner, self.new_user)
 
 
 class ViewTest(TestCase):
-	pass
+
+	@classmethod
+	def setUpTestData(cls):
+		cls.username = 'bogus_name'
+		cls.password = 'bogus_password_123'
+		cls.new_user = User.objects.create_user(username=cls.username, password=cls.password)
+
+		cls.login_password = 'imaginary_password'
+		cls.pass_obj = PasswordManager.objects.create(owner=cls.new_user, site_name='imaginary_name',
+			site_url='http://example.com', login_name='imaginary_login', login_password=cls.login_password)
+
+	def test_password_manager_page_uses_correct_view_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		response = self.client.get(reverse('password_manager:password_manager'))
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.resolver_match.func, password_manager)
+
+	def test_password_manager_page_render_correct_template_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		response = self.client.get(reverse('password_manager:password_manager'))
+
+		self.assertTemplateUsed(response, 'password_manager/home.html')
+
+	def test_password_manager_page_uses_redirect_for_anonymous_user(self):
+		response = self.client.get(reverse('password_manager:password_manager'))
+
+		self.assertRedirects(response, '/account/?next=/password_manager/', status_code=302, target_status_code=200)
+
+	def test_password_manager_page_filter_queryset(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		new_user = User.objects.create_user(username='new_user', password='new_password')
+		new_pass_obj = PasswordManager.objects.create(owner=new_user, site_name='fake_name',
+			site_url='http://example.com', login_name='fake_login', login_password='fake_password')
+
+		response = self.client.get(reverse('password_manager:password_manager'))
+
+		self.assertIn(self.pass_obj, response.context['password_manager'])
+		self.assertNotIn(new_pass_obj, response.context['password_manager'])
+
+	def test_create_password_view_GET_request(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		response = self.client.get(
+			reverse('password_manager:create_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn('site_name', response.content.decode('utf-8'))
+		self.assertIn('login_password', response.content.decode('utf-8'))
+
+
+	def test_create_password_view_valid_POST_request_for_logged_in_users(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		fake_name = 'fake_name'
+		data = {
+			'site_name': fake_name,
+			'site_url': 'http://example.com',
+			'login_name': 'fake_login',
+			'login_password':'fake_password'
+			}
+
+		response = self.client.post(
+			reverse('password_manager:create_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertEqual(len(response.context['password_manager'].filter(site_name=fake_name)), 1)
+		self.assertEqual(len(PasswordManager.objects.filter(site_name=fake_name)), 1)
+		self.assertFalse(response.context['password_manager_form'].errors)
+
+	def test_create_password_view_valid_POST_request_for_anonymous_user(self):
+		fake_name = 'fake_name'
+		data = {
+			'site_name': fake_name,
+			'site_url': 'http://example.com',
+			'login_name': 'fake_login',
+			'login_password':'fake_password'
+			}
+
+		response = self.client.post(
+			reverse('password_manager:create_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			data=data)
+
+		self.assertRedirects(response, '/account/?next=/password_manager/create_password', status_code=302, target_status_code=200)
+
+		self.assertEqual('text/html; charset=utf-8', response['Content-Type'])
+
+
+	def test_create_password_view_invalid_POST_request_for_logged_in_users(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		fake_name = 'fake_name'
+		data = {
+			'site_name': fake_name,
+			'site_url': 'example',
+			'login_name': 'fake_login',
+			'login_password':''
+			}
+
+		response = self.client.post(
+			reverse('password_manager:create_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+
+		self.assertIn('site_url', response.context['password_manager_form'].errors)
+		self.assertIn('login_password', response.context['password_manager_form'].errors)
+
+		self.assertEqual(len(PasswordManager.objects.filter(site_name=fake_name)), 0)
+
+	def test_edit_password_view_GET_request_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		response = self.client.get(
+			reverse('password_manager:edit_password', kwargs={'password_pk': self.pass_obj.pk}),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn(self.pass_obj.site_name, response.content.decode('utf-8'))
+		self.assertIn(self.pass_obj.login_name, response.content.decode('utf-8'))
+
+	def test_edit_password_view_GET_request_for_anonymous_user(self):
+		response = self.client.get(
+			reverse('password_manager:edit_password', kwargs={'password_pk': self.pass_obj.pk}),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertRedirects(
+			response,
+			'/account/?next=/password_manager/edit_password/{}'.format(self.pass_obj.pk),
+			status_code=302,
+			target_status_code=200)
+
+	def test_edit_password_view_valid_POST_request_for_correct_logged_in_users(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		fake_name = 'fake_name'
+		data = {
+			'site_name': fake_name,
+			'site_url': 'http://example.com',
+			'login_name': 'fake_login',
+			'login_password':'fake_password'
+			}
+
+		response = self.client.post(
+			reverse('password_manager:edit_password', kwargs={'password_pk': self.pass_obj.pk}),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertEqual(response.context['password_manager'].get(site_name=fake_name).pk, self.pass_obj.pk)
+		self.assertEqual(PasswordManager.objects.get(site_name=fake_name).pk, self.pass_obj.pk)
+		self.assertFalse(response.context['password_manager_form'].errors)
+
+	def test_edit_password_view_valid_POST_request_for_incorrect_logged_in_users(self):
+		new_username = 'new_user'
+		new_user_password = 'new_password'
+		new_user = User.objects.create_user(username=new_username, password=new_user_password)
+
+		self.client.login(username=new_username, password=new_user_password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		fake_name = 'fake_name'
+		data = {
+			'site_name': fake_name,
+			'site_url': 'http://example.com',
+			'login_name': 'fake_login',
+			'login_password':'fake_password'
+			}
+
+		response = self.client.post(
+			reverse('password_manager:edit_password', kwargs={'password_pk': self.pass_obj.pk}),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			data=data)
+
+		self.assertEqual(response.status_code, 404)
+
+	def test_edit_password_view_invalid_POST_request_for_logged_in_users(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		fake_name = 'fake_name'
+		data = {
+			'site_name': fake_name,
+			'site_url': 'example',
+			'login_name': 'fake_login',
+			'login_password':''
+			}
+
+		response = self.client.post(
+			reverse('password_manager:edit_password', kwargs={'password_pk': self.pass_obj.pk}),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+
+		self.assertIn('site_url', response.context['password_manager_form'].errors)
+		self.assertIn('login_password', response.context['password_manager_form'].errors)
+
+		self.assertEqual(len(PasswordManager.objects.filter(site_name=fake_name)), 0)
+
+	def test_delete_password_view_GET_request_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		response = self.client.get(
+			reverse('password_manager:delete_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertEqual(response.status_code, 404)
+
+	def test_delete_password_view_GET_request_for_anonymous_user(self):
+		response = self.client.get(
+			reverse('password_manager:delete_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertRedirects(
+			response,
+			'/account/?next=/password_manager/delete_password',
+			status_code=302,
+			target_status_code=200)
+
+	def test_delete_password_view_valid_POST_request_for_correct_logged_in_users(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		new_pass_obj = PasswordManager.objects.create(owner=self.new_user, site_name='fake_name',
+			site_url='http://example.com', login_name='fake_login', login_password='fake_password')
+
+		self.assertIn(new_pass_obj, PasswordManager.objects.all())
+
+		data = dumps({"id": new_pass_obj.pk})
+
+		response = self.client.post(
+			reverse('password_manager:delete_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertEqual(len(response.context['password_manager'].filter(site_name=new_pass_obj.site_name)), 0)
+		self.assertNotIn(new_pass_obj, PasswordManager.objects.all())
+
+	def test_delete_password_view_valid_POST_request_for_incorrect_logged_in_users(self):
+		new_username = 'new_user'
+		new_user_password = 'new_password'
+		new_user = User.objects.create_user(username=new_username, password=new_user_password)
+
+		self.client.login(username=new_username, password=new_user_password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		data = dumps({"id": self.pass_obj.pk})
+
+		response = self.client.post(
+			reverse('password_manager:delete_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json',
+			data=data)
+
+		self.assertEqual(response.status_code, 404)
+
+	def test_check_password_view_GET_request_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		response = self.client.get(
+			reverse('password_manager:check_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertEqual(response.status_code, 404)
+
+	def test_check_password_view_GET_request_for_anonymous_user(self):
+		response = self.client.get(
+			reverse('password_manager:check_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json')
+
+		self.assertRedirects(
+			response,
+			'/account/?next=/password_manager/check_password',
+			status_code=302,
+			target_status_code=200)
+
+	def test_check_password_view_valid_POST_request(self):
+		self.client.login(username=self.username, password=self.password)
+		self.assertIsInstance(auth.get_user(self.client), User)
+
+		data = dumps({"password": 'imagPAS7%&'})
+
+		response = self.client.post(
+			reverse('password_manager:check_password'),
+			HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+			content_type='application/json',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn('Bits of entropy', response.content.decode('utf-8'))
+		self.assertIn('progress-bar', response.content.decode('utf-8'))
