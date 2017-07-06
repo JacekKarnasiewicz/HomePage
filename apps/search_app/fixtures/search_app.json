@@ -17,7 +17,7 @@
   "pk": null,
   "fields": {
     "name": "Search Applications",
-    "description": "Available filter tags:\r\n<br>\r\npython, django, django channels, javascript, css, matplotlib, numpy, pandas, scikit-learn, highcharts, pillow, mptt, template tags, ajax, yield, thread, streaminghttpresponse, context processors, cookies, signals, websocket, redis, daphne, authentication, regex, tabindex, chat, codility, julia set, fractals, wallpaper",
+    "description": "Available filter tags:\r\n<br>\r\npython, django, django channels, django rest framework, javascript, css, matplotlib, numpy, pandas, scikit-learn, pycryptodome, encryption, highcharts, pillow, mptt, template tags, ajax, yield, thread, streaminghttpresponse, context processors, cookies, signals, websocket, redis, daphne, regex, tabindex, one page app, chat, password manager, codility, julia set, fractals, wallpaper",
     "tags": "python, django, signals, regex, tabindex, javascript",
     "image": "images/search_app/search_app.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/search_app",
@@ -107,13 +107,39 @@
   "model": "search_app.applications",
   "pk": null,
   "fields": {
-    "name": "Django Channels with Authetication",
+    "name": "Django Channels",
     "description": "Simple general chat that utilizes django channels and reddis backend. To use it just create an account (or two) and open two different window browsers.\r\nBy design I don't store any conversations or any information that is put into the chat.\r\nSo have fun and be polite :)",
-    "tags": "python, django, javascript, signals, django channels, authentication, websocket, redis, daphne, chat",
+    "tags": "python, django, javascript, signals, django channels, websocket, redis, daphne, chat",
     "image": "images/auth_chat/auth_chat.jpg",
     "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/auth_chat",
     "url_name": "auth_chat",
     "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": null,
+  "fields": {
+    "name": "Password Manager",
+    "description": "One page application for password management with custom database encryption, password entropy and django rest framework.",
+    "tags": "python, django, rest, django rest framework, password manager, one page app, encryption, pycryptodome, password entropy",
+    "image": "images/password_manager/password_manager.jpg",
+    "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/password_manager",
+    "url_name": "password_manager",
+    "visible": true
+  }
+},
+{
+  "model": "search_app.applications",
+  "pk": null,
+  "fields": {
+    "name": "Account Manager",
+    "description": "Log in or create new account. Account is needed to access some of the  applications e.g. chat or password manager",
+    "tags": "python, django, authentication, account",
+    "image": "images/account/account.jpg",
+    "url_source": "https://github.com/JacekKarnasiewicz/HomePage/tree/master/apps/account",
+    "url_name": "account",
+    "visible": false
   }
 }
 ]
