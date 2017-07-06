@@ -9,6 +9,14 @@
 {% block content %}
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p><b>Rest Api available at:</b> <a href="{% url 'password_manager:api:list' %}">{% url 'password_manager:api:list' %}</a></p>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			<div style="overflow-x:auto;">
 				<table id="passwordManagerTable" class="table table-striped">
 					{% include 'password_manager/table.html' %}
