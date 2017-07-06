@@ -11,3 +11,5 @@ Koncepcja:
 5) Gdybyśmy planowali połączyc nasz moduł z innymi zewnętrznymi aplikacjami to mamy dostęp do restowego api, które ułatwi nam takie połączenia
 
 6) Każdy wpis można szybko i wygodnie tworzyć, edytować i usuwać
+
+7) Password entropy - wybrałem troszkę inną drogę walidacji. Postanowiłem nie testować przy każdym wpisie nowego znaku całych list(które mi przekazaliści), wydawało mi się to troche zbyt uciążliwe dla potencjalnego klienta, tym bardziej że listy słów i najczęstszych haseł były bardzo duże. Po przeglądnięciu tych listy doszedłem do wniosku że naprawde dobre hasło którego nie znajdziemy na tych listach powinno mieć przynajmniej 8 znaków, zawierać przynajmniej jedną dużą i małą liter, cyfre i znak specjalny. Przy takim podejściu bardzo szybko sprawdzimy 'siłe' naszego hasła i nie będziemy niepotrzebnie przeczesywać setek tysięcy wpisów z dostarczonych list.
