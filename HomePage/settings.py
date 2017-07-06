@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
 	'mptt',
 	'channels',
+	'rest_framework',
 
 	'HomePage',
 	'apps.search_app',

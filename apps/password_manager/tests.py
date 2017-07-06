@@ -1,4 +1,4 @@
-from json import dumps
+from json import dumps, loads
 
 from django.contrib import auth
 from django.core.exceptions import ValidationError
@@ -530,3 +530,148 @@ class ViewTest(TestCase):
 
 		self.assertIn('Bits of entropy', response.content.decode('utf-8'))
 		self.assertIn('progress-bar', response.content.decode('utf-8'))
+
+
+class ApiTest(TestCase):
+
+	@classmethod
+	def setUpTestData(cls):
+		cls.username = 'bogus_name'
+		cls.password = 'bogus_password_123'
+		cls.new_user = User.objects.create_user(username=cls.username, password=cls.password)
+
+		cls.login_password = 'imaginary_password'
+		cls.site_name = 'imaginary_name'
+		cls.pass_obj = PasswordManager.objects.create(owner=cls.new_user, site_name=cls.site_name,
+			site_url='http://example.com', login_name='imaginary_login', login_password=cls.login_password)
+
+	def test_PasswordManagerListAPIView_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+
+		response = self.client.get(reverse('password_manager:api:list'))
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn(self.site_name, response.content.decode('utf-8'))
+
+	def test_PasswordManagerListAPIView_for_anonymous_user(self):
+		response = self.client.get(reverse('password_manager:api:list'))
+
+		self.assertEqual(response.status_code, 403)
+		self.assertEqual('application/json', response['Content-Type'])
+
+	def test_PasswordManagerRetrieveAPIView_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+		response = self.client.get(reverse('password_manager:api:retrieve', kwargs={'site_name': self.site_name}))
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn(self.site_name, response.content.decode('utf-8'))
+		self.assertNotIn(str(self.pass_obj.login_password), response.content.decode('utf-8'))
+		self.assertIn(self.login_password, response.content.decode('utf-8'))
+
+	def test_PasswordManagerRetrieveAPIView_for_anonymous_in_user(self):
+		response = self.client.get(reverse('password_manager:api:retrieve', kwargs={'site_name': self.site_name}))
+
+		self.assertEqual(response.status_code, 403)
+		self.assertEqual('application/json', response['Content-Type'])
+
+	def test_PasswordManagerCreateAPIView_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+
+		data = {
+			'site_name': 'fake_name',
+			'site_url': 'http://example.com',
+			'login_name': 'fake_login',
+			'login_password':'fake_password'
+		}
+
+		response = self.client.post(reverse('password_manager:api:create'), data=data)
+
+		self.assertEqual(response.status_code, 201)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn(data['site_name'], PasswordManager.objects.all().values_list('site_name', flat=True))
+
+	def test_PasswordManagerCreateAPIView_for_anonymous_user(self):
+		data = {
+			'site_name': 'fake_name',
+			'site_url': 'http://example.com',
+			'login_name': 'fake_login',
+			'login_password':'fake_password'
+		}
+
+		response = self.client.post(reverse('password_manager:api:create'), data=data)
+
+		self.assertEqual(response.status_code, 403)
+		self.assertEqual('application/json', response['Content-Type'])
+
+	def test_PasswordManagerUpdateAPIView_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+
+		new_imaginary_name = 'new_imaginary_name'
+		data = dumps({
+			'site_name': new_imaginary_name,
+			'site_url': 'http://example.com',
+			'login_name': 'imaginary_login',
+			'login_password':'imaginary_password'
+		})
+
+		response = self.client.put(
+			reverse('password_manager:api:update', kwargs={'site_name': self.site_name}),
+			content_type='application/json',
+			data=data)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertIn(new_imaginary_name, PasswordManager.objects.all().values_list('site_name', flat=True))
+		self.assertIn(self.pass_obj.pk, PasswordManager.objects.all().values_list('pk', flat=True))
+
+	def test_PasswordManagerUpdateAPIView_for_anonymous_user(self):
+		new_imaginary_name = 'new_imaginary_name'
+		data = dumps({
+			'site_name': new_imaginary_name,
+			'site_url': 'http://example.com',
+			'login_name': 'imaginary_login',
+			'login_password':'imaginary_password'
+		})
+
+		response = self.client.put(
+			reverse('password_manager:api:update', kwargs={'site_name': self.site_name}),
+			content_type='application/json',
+			data=data)
+
+		self.assertEqual(response.status_code, 403)
+		self.assertEqual('application/json', response['Content-Type'])
+
+		self.assertNotIn(new_imaginary_name, PasswordManager.objects.all().values_list('site_name', flat=True))
+		self.assertIn(self.pass_obj.pk, PasswordManager.objects.all().values_list('pk', flat=True))
+
+	def test_PasswordManagerDestroyAPIView_for_logged_in_user(self):
+		self.client.login(username=self.username, password=self.password)
+
+		new_site_name = 'fake_name'
+		new_pass_obj = PasswordManager.objects.create(owner=self.new_user, site_name=new_site_name, 
+			site_url='http://example.com', login_name='fake_login', login_password='fake_password')
+
+		self.assertIn(new_site_name, PasswordManager.objects.all().values_list('site_name', flat=True))
+
+		response = self.client.delete(reverse('password_manager:api:destroy', kwargs={'site_name': new_site_name}))
+
+		self.assertEqual(response.status_code, 204)
+		self.assertNotIn(new_site_name, PasswordManager.objects.all().values_list('site_name', flat=True))
+	
+	def test_PasswordManagerDestroyAPIView_for_anonymous_user(self):
+		new_site_name = 'fake_name'
+		new_pass_obj = PasswordManager.objects.create(owner=self.new_user, site_name=new_site_name, 
+			site_url='http://example.com', login_name='fake_login', login_password='fake_password')
+
+		self.assertIn(new_site_name, PasswordManager.objects.all().values_list('site_name', flat=True))
+
+		response = self.client.delete(reverse('password_manager:api:destroy', kwargs={'site_name': new_site_name}))
+
+		self.assertEqual(response.status_code, 403)
+		self.assertIn(new_site_name, PasswordManager.objects.all().values_list('site_name', flat=True))

@@ -21,7 +21,7 @@ class PasswordManager(models.Model):
 
 	# encryption key
 	# We shouldn't keep SECRET encryption key here - it should be secret!(e.g. environment variable)
-	# It's for fast installation from git, and easier to review and test code
+	# It's for fast installation from git, and easier way to review and test code
 	secret_key = "d5gnOM2V!|E1[TxhHi]@I'eDst*Ha[zq"
 	block_size = AES.block_size
 
