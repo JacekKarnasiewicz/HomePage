@@ -44,7 +44,7 @@ class UtilitiesTest(TestCase):
 		self.assertEqual(pass_obj.get_password_strength(), CheckPassword.password_strength_options[1])
 
 	def test_CheckPassword_only_number_characters(self):
-		pass_obj = CheckPassword('0123456789')
+		pass_obj = CheckPassword('0133557799')
 
 		self.assertAlmostEqual(pass_obj.get_bits_of_entropy(), 33.2, places=1)
 		self.assertEqual(len(pass_obj.get_annotations()), 3)
@@ -79,11 +79,25 @@ class UtilitiesTest(TestCase):
 		self.assertEqual(pass_obj.get_password_strength(), CheckPassword.password_strength_options[2])
 
 	def test_CheckPassword_long_password_lower_and_upper_case_characters_with_numbers_and_special_characters(self):
-		pass_obj = CheckPassword('abcDEF01!@qweRTY34#$')
+		pass_obj = CheckPassword('abcDEF01!@qieRTY34#$')
 
 		self.assertAlmostEqual(pass_obj.get_bits_of_entropy(), 131.09, places=1)
 		self.assertEqual(len(pass_obj.get_annotations()), 0)
 		self.assertEqual(pass_obj.get_password_strength(), CheckPassword.password_strength_options[4])
+
+	def test_CheckPassword_password_mutations(self):
+		pass_obj = CheckPassword('abcP@s$w0rD')
+
+		self.assertAlmostEqual(pass_obj.get_bits_of_entropy(), 72.1, places=1)
+		self.assertEqual(len(pass_obj.get_annotations()), 1)
+		self.assertEqual(pass_obj.get_password_strength(), CheckPassword.password_strength_options[2])
+
+	def test_CheckPassword_common_substrings(self):
+		pass_obj = CheckPassword('#$R9tjzqAz?.')
+
+		self.assertAlmostEqual(pass_obj.get_bits_of_entropy(), 78.65, places=1)
+		self.assertEqual(len(pass_obj.get_annotations()), 1)
+		self.assertEqual(pass_obj.get_password_strength(), CheckPassword.password_strength_options[2])
 
 
 class ModelTest(TestCase):

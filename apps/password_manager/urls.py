@@ -10,6 +10,5 @@ urlpatterns = [
 	url(r'^delete_password$', delete_password, name='delete_password'),
 	url(r'^check_password$', check_password, name='check_password'),
 
-	# url(r'^api/', include('apps.password_manager.api.urls', namespace='password_manager_api', app_name='password_manager_api')),
 	url(r'^api/', include('apps.password_manager.api.urls', namespace='api')),
 ]
