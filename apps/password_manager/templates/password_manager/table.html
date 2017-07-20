@@ -22,6 +22,9 @@
 			<a class="btn btn-default btn-sm edit" data-id="{{ obj.pk }}" data-toggle="modal" data-target="#formModal" href="#">Edit</a>
 		</td>
 		<td>
+			<a class="btn btn-default btn-sm generate_link" data-id="{{ obj.pk }}" data-url="{% url 'password_manager:generate_link' obj_pk=obj.pk %}" data-toggle="modal" data-target="#formModal" href="#">Generate Link</a>
+		</td>
+		<td>
 			<button class="btn btn-default btn-sm delete" data-id="{{ obj.pk }}">Delete</button>
 		</td>
 

@@ -1,6 +1,7 @@
 from json import loads
 
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
@@ -110,3 +111,32 @@ def check_password(request):
 		return JsonResponse({'password_template': password_template})
 
 	raise Http404('Resource Not Found')
+
+
+@login_required
+def generate_link(request, obj_pk):
+	obj = get_object_or_404(PasswordManager, pk=obj_pk)
+
+	if request.user != obj.owner:
+		raise Http404('Resource Not Found')
+
+	host = request.get_host()
+	link = reverse('password_manager:access_link', kwargs={'link': obj.create_share_link()})
+	link_template = render_to_string(
+		'password_manager/link_modal.html',
+		request=request,
+		context={'link': host + link})
+	return JsonResponse({'link_template': link_template})
+
+
+@login_required
+def access_link(request, link):
+	ctx = {}
+	obj_pk = PasswordManager.check_share_link(link)
+	if obj_pk:
+		obj = get_object_or_404(PasswordManager, pk=obj_pk)
+		ctx['password'] = obj.decrypt_login_password()
+		ctx['message'] = '{} share with you password for {} site:'.format(obj.owner, obj.site_name)
+	else:
+		ctx['message'] = "Link has expired or doesn't exists"
+	return render(request, 'password_manager/access_link.html', ctx)

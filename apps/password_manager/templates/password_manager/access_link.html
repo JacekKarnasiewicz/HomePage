@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block jumbotron %}
+	<h1>{{ current_app.name }}</h1>
+	<p class="lead">{{ current_app.description|safe }}</p>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p class="text-center"><b>{{ message }}</b></p>
+			<p class="text-center">{{ password }}</p>
+		</div>
+	</div>
+{% endblock %}

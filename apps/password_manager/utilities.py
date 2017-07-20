@@ -108,3 +108,5 @@ class CheckPassword(object):
 
 	def get_password_strength(self):
 		return self.password_strength
+
+

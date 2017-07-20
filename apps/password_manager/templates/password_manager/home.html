@@ -126,6 +126,15 @@
 				}
 			});
 		});
+
+
+		// generate shared link
+		$('#passwordManagerTable').on('click', '.generate_link', function(e){
+			e.preventDefault();
+			$.getJSON(this.dataset.url.toString(), function(data) {
+				$('#modalContent').html(data.link_template);
+			});
+		});
 	})
 </script>
 {% endblock %}
